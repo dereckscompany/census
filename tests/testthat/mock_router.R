@@ -61,6 +61,18 @@ box::use(
   ))
 }
 
+# A survey year the Bureau never released (e.g. acs1 2020) returns HTTP 404 with a
+# text/html body -- which must surface as a 404, NOT the 200-text/html key page.
+#' @export
+.not_found_response <- function() {
+  return(httr2::response(
+    status_code = 404L,
+    url = "https://api.census.gov/data/2020/acs/acs1",
+    headers = list("content-type" = "text/html"),
+    body = charToRaw("<html><head><title>404 Not Found</title></head><body>Not Found</body></html>")
+  ))
+}
+
 #' Route table: URL pattern -> synthetic-fixture JSON string (or a response thunk).
 #'
 #' Order matters -- the per-dataset variables.json / geography.json routes precede
@@ -68,10 +80,10 @@ box::use(
 #' URL.
 #' @export
 .mock_routes <- list(
-  # ---- Keyless metadata / discovery ----
+  # ---- Keyless metadata / discovery (before the bare data-query routes) ----
   list(pattern = "/timeseries/eits/marts/variables.json", fixture = .fixtures$variables_eits),
   list(pattern = "/timeseries/eits/marts/geography.json", fixture = .fixtures$geography_eits),
-  list(pattern = "/2023/acs/acs1/variables.json", fixture = .fixtures$variables_eits),
+  list(pattern = "/2023/acs/acs1/variables.json", fixture = .fixtures$variables_acs),
   list(pattern = "/2023/acs/acs1/geography.json", fixture = .fixtures$geography_acs),
 
   # ---- EITS data queries ----
@@ -79,6 +91,17 @@ box::use(
   list(pattern = "/timeseries/eits/bfs", fixture = .fixtures$eits_bfs),
   list(pattern = "/timeseries/eits/resconst", fixture = .fixtures$eits_marts),
   list(pattern = "/timeseries/eits/advm3", fixture = .fixtures$eits_marts),
+
+  # ---- ACS data queries ----
+  # A group() query encodes as get=group%28...%29; match it before the bare year
+  # routes so the group fixture wins over the regular wide fixture.
+  list(pattern = "get=group", fixture = .fixtures$acs1_group),
+  # A survey year the Bureau never released -> 404 (backfill skips it).
+  list(pattern = "/2020/acs/acs1", fixture = .not_found_response),
+  list(pattern = "/2023/acs/acs1", fixture = .fixtures$acs1_wide),
+  list(pattern = "/2022/acs/acs1", fixture = .fixtures$acs1_wide),
+  list(pattern = "/2021/acs/acs1", fixture = .fixtures$acs1_wide),
+  list(pattern = "/2019/acs/acs1", fixture = .fixtures$acs1_wide),
 
   # ---- Error surfaces (end-to-end) ----
   # An otherwise-unfixtured program stands in for the missing-key redirect.

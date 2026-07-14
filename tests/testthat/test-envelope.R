@@ -63,3 +63,15 @@ test_that("a success array-of-arrays parses to a nested list", {
   expect_type(parsed, "list")
   expect_identical(unlist(parsed[[1L]]), c("cell_value", "time"))
 })
+
+test_that("a non-200 text/html body (a missing survey year) is a plain HTTP error, not the key page", {
+  resp <- httr2::response(
+    status_code = 404L,
+    url = "https://api.census.gov/data/2020/acs/acs1",
+    headers = list("content-type" = "text/html"),
+    body = charToRaw("<html><head><title>404 Not Found</title></head><body>Not Found</body></html>")
+  )
+  err <- tryCatch(parse_census_response(resp), error = function(e) e)
+  expect_s3_class(err, "census_api_error_404")
+  expect_false(isTRUE(err$key_error))
+})

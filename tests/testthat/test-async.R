@@ -64,3 +64,20 @@ test_that("an async data error rejects the promise (missing-key redirect)", {
   err <- tryCatch(resolve_promise(p), error = function(e) e)
   expect_s3_class(err, "census_api_error_401")
 })
+
+test_that("get_acs async returns a promise resolving to the sync table", {
+  skip_if_not_installed("promises")
+  skip_if_not_installed("later")
+  connectcore::local_mock_api(.mock_routes)
+  args <- list(2023, "acs1", c("NAME", "B01001_001E"))
+  sync <- do.call(
+    CensusACS$new(api_key = "k", async = FALSE)$get_acs,
+    c(args, list(geo_for = "county:*", geo_in = "state:06"))
+  )
+  p <- do.call(
+    CensusACS$new(api_key = "k", async = TRUE)$get_acs,
+    c(args, list(geo_for = "county:*", geo_in = "state:06"))
+  )
+  expect_true(inherits(p, "promise"))
+  expect_equal(resolve_promise(p), sync)
+})

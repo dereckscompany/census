@@ -19,6 +19,12 @@ reference:
     contents:
       - CensusEconomicIndicators
       - census_backfill_series
+  - title: American Community Survey (ACS)
+    desc: The ACS aggregate client, the multi-vintage backfill, and label lookup.
+    contents:
+      - CensusACS
+      - census_backfill_acs
+      - census_acs_labels
   - title: Keyless discovery
     desc: Introspect the catalogue and dataset metadata with no API key.
     contents:
@@ -35,6 +41,8 @@ reference:
       - EITS_PROGRAMS
       - EITS_GET_VARS
       - SEASONALLY_ADJ
+      - ACS_DATASETS
+      - CENSUS_MAX_VARIABLES
   - title: Conditions and shapes
     desc: The typed condition family and the documented return shapes.
     contents:

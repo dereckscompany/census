@@ -14,10 +14,13 @@ knitr::opts_chunk$set(
 box::use(
     census[
         CensusEconomicIndicators,
+        CensusACS,
         census_datasets,
         census_variables,
         census_geographies,
-        census_backfill_series
+        census_acs_labels,
+        census_backfill_series,
+        census_backfill_acs
     ],
     connectcore[local_mock_api],
     ./tests/testthat/mock_router[.mock_routes]
@@ -36,7 +39,7 @@ Sys.setenv(CENSUS_API_KEY = "demo-key-for-mock-render")
 
 # census
 
-R API wrapper to the US Census Bureau Data API supporting both synchronous and asynchronous (promise based) operations. Provides R6 classes for the Economic Indicators Time Series (EITS) family and keyless dataset, variable, and geography discovery, built on the shared [connectcore](https://github.com/dereckscompany/connectcore) transport base.
+R API wrapper to the US Census Bureau Data API supporting both synchronous and asynchronous (promise based) operations. Provides R6 classes for the Economic Indicators Time Series (EITS) family and the American Community Survey (ACS) demographic aggregates, plus keyless dataset, variable, and geography discovery, built on the shared [connectcore](https://github.com/dereckscompany/connectcore) transport base.
 
 ## What this is
 
@@ -104,6 +107,38 @@ vars[, .(name, label, required)]
 
 census_geographies("2023/acs/acs1")
 ```
+
+## American Community Survey (ACS)
+
+ACS gives income, employment, and demographics for every US geography, as a wide table — one row per geography, one column per requested variable. Estimate (`*E`) and margin-of-error (`*M`) columns are numeric; annotation and code columns are character.
+
+```{r acs}
+acs <- CensusACS$new()
+
+ca <- acs$get_acs(
+    2023, "acs1",
+    variables = c("NAME", "B01001_001E", "B19013_001E"),
+    geo_for = "county:*", geo_in = "state:06"
+)
+ca
+```
+
+Each survey year is its own dataset (there is no `time` predicate), so a multi-year pull iterates the years and stacks them with a `year` column — a year the Bureau never released (e.g. 1-year 2020) is skipped:
+
+```{r acs-backfill, eval = FALSE}
+income <- census_backfill_acs(
+    from = 2018, to = 2023, dataset = "acs1",
+    variables = c("NAME", "B19013_001E"), geo_for = "state:*"
+)
+```
+
+The wide columns are terse variable codes; look up their labels from the keyless dictionary:
+
+```{r acs-labels}
+census_acs_labels(2023, "acs1", variables = c("B01001_001E", "B19013_001E"))[, .(name, label)]
+```
+
+The whole grammar validates against the geography `requires` chains before spending a keyed call: a wildcard child (`county:*`) may omit its parents, but a specific one (`county:037`) must supply them — mirroring the API exactly.
 
 ## Asynchronous usage
 

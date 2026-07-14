@@ -1,0 +1,7 @@
+[
+  ["NAME", "B01001_001E", "B19013_001E", "B19013_001M", "B19013_001EA", "state", "county"],
+  ["Alpha County, Testland", "100000", "65000", "500", null, "90", "001"],
+  ["Beta County, Testland", "250000", "82000", "1200", null, "90", "003"],
+  ["Gamma County, Testland", "5000", null, null, null, "90", "005"],
+  ["Delta County, Testland", "1200", "-666666666", "-555555555", null, "90", "007"]
+]

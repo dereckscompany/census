@@ -102,3 +102,39 @@ census_geographies <- function(dataset_path, base_url = census_base_url(), async
   )
   return(connectcore::then_or_now(res, assert_return_census_geographies, is_async = async))
 }
+
+#' Look up human-readable labels for ACS variables (keyless)
+#'
+#' @description
+#' Returns the labels and concepts for a set of ACS variables, so the wide
+#' [AcsTable][census_shapes] whose columns are terse variable codes (`B19013_001E`)
+#' can be interpreted. A thin, cheap filter over the keyless variable dictionary.
+#'
+#' @details
+#' Fetches the dataset's `variables.json` (the same source as [census_variables()])
+#' and returns only the rows for the requested `variables`; `NULL` returns the whole
+#' dictionary. Use it to attach meaning to a `get_acs()` result — e.g. join its
+#' `name` to your table's column names.
+#'
+#' @param year (scalar<count in [2005, Inf[>) the ACS vintage year.
+#' @param dataset (scalar<character>) the ACS dataset, `"acs1"` or `"acs5"`.
+#' @param variables (vector<character, 1..> | NULL) the variables to keep; `NULL`
+#'   returns the whole dictionary. Default `NULL`.
+#' @param base_url (scalar<character>) the Census Data API base URL. Defaults to
+#'   [census_base_url()].
+#' @param async (scalar<logical>) if `TRUE`, returns a promise. Default `FALSE`.
+#' @return (VariableDictionary | promise<VariableDictionary>) one row per matched
+#'   variable, or a promise thereof.
+#' @export
+census_acs_labels <- function(year, dataset = "acs1", variables = NULL, base_url = census_base_url(), async = FALSE) {
+  assert_args_census_acs_labels(year, dataset, variables, base_url, async)
+  res <- census_variables(paste0(year, "/acs/", dataset), base_url = base_url, async = async)
+  select_fn <- function(dict) {
+    out <- dict
+    if (!is.null(variables)) {
+      out <- dict[dict[["name"]] %in% variables, ]
+    }
+    return(assert_return_census_acs_labels(out))
+  }
+  return(connectcore::then_or_now(res, select_fn, is_async = async))
+}

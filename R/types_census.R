@@ -54,4 +54,27 @@
 #'   (e.g. EITS) exposes a level with no level code.
 #' - name (character) the geography level name, e.g. "us", "state", "county"; structural.
 #' - requires (character | NA) the parent level(s) the `in` clause must satisfy, ";"-joined; NA when none required.
+#'
+#' @section AcsTable (a dynamic-width shape):
+#' `get_acs()` / `get_acs_group()` return a **dynamic-width** `data.table` — one row
+#' per geography, whose columns depend on the `variables` requested and the geography
+#' queried — so it is documented as a shape here rather than pinned to a fixed column
+#' contract (the method's `@return` is `(data.table | promise<data.table>)`, and only
+#' the `data.table` class is asserted at the boundary). For the worked example
+#' `get_acs(2023, "acs1", c("NAME", "B01001_001E", "B19013_001E"), geo_for = "county:*", geo_in = "state:06")`
+#' the columns are:
+#' - name (character | NA) the geography label, from the NAME variable, e.g. "Los Angeles County"; structural.
+#' - b01001_001e (numeric | NA) total-population estimate (an `*E` estimate variable); measurement.
+#' - b19013_001e (numeric | NA) median-household-income estimate; measurement.
+#' - state (character) the state FIPS code, e.g. "06"; a geography-code column, structural.
+#' - county (character) the county FIPS code, e.g. "037"; a geography-code column, structural.
+#'
+#' The typing **rule** for the dynamic columns (applied by the parser to each header
+#' name, checking the annotation suffixes first):
+#' - `*EA` / `*MA` annotation-flag columns are (character | NA).
+#' - `*E` / `*M` (and profile `*PE` / `*PM`) estimate and margin-of-error columns are (numeric | NA); the Bureau's
+#'   suppression/annotation sentinels (large negative "jam" values) are kept verbatim, not coerced to NA.
+#' - NAME, GEO_ID, other string variables, and every geography-code column (state, county, tract, block group, ...)
+#'   are (character | NA); geography-code columns are always populated in practice.
+#' - `census_backfill_acs()` prepends a `year` (integer) column, the survey vintage, to distinguish stacked years.
 NULL

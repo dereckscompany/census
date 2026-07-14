@@ -13,3 +13,32 @@ no \verb{@genassert} (no callable validators to generate) and no \verb{@exportas
 (nothing to export); the shapes exist only to be expanded into each function's
 own return contract.
 }
+\section{AcsTable (a dynamic-width shape)}{
+
+\code{get_acs()} / \code{get_acs_group()} return a \strong{dynamic-width} \code{data.table} — one row
+per geography, whose columns depend on the \code{variables} requested and the geography
+queried — so it is documented as a shape here rather than pinned to a fixed column
+contract (the method's \verb{@return} is \verb{(data.table | promise<data.table>)}, and only
+the \code{data.table} class is asserted at the boundary). For the worked example
+\code{get_acs(2023, "acs1", c("NAME", "B01001_001E", "B19013_001E"), geo_for = "county:*", geo_in = "state:06")}
+the columns are:
+\itemize{
+\item name (character | NA) the geography label, from the NAME variable, e.g. "Los Angeles County"; structural.
+\item b01001_001e (numeric | NA) total-population estimate (an \verb{*E} estimate variable); measurement.
+\item b19013_001e (numeric | NA) median-household-income estimate; measurement.
+\item state (character) the state FIPS code, e.g. "06"; a geography-code column, structural.
+\item county (character) the county FIPS code, e.g. "037"; a geography-code column, structural.
+}
+
+The typing \strong{rule} for the dynamic columns (applied by the parser to each header
+name, checking the annotation suffixes first):
+\itemize{
+\item \verb{*EA} / \verb{*MA} annotation-flag columns are (character | NA).
+\item \verb{*E} / \verb{*M} (and profile \verb{*PE} / \verb{*PM}) estimate and margin-of-error columns are (numeric | NA); the Bureau's
+suppression/annotation sentinels (large negative "jam" values) are kept verbatim, not coerced to NA.
+\item NAME, GEO_ID, other string variables, and every geography-code column (state, county, tract, block group, ...)
+are (character | NA); geography-code columns are always populated in practice.
+\item \code{census_backfill_acs()} prepends a \code{year} (integer) column, the survey vintage, to distinguish stacked years.
+}
+}
+

@@ -122,3 +122,61 @@ test_that("an invalid key surfaces as census_api_error_401 live", {
   expect_s3_class(err, "census_api_error_401")
   expect_true(isTRUE(err$key_error))
 })
+
+# ---- ACS (Phase 2) ----
+
+test_that("get_acs returns live ACS county data typed by the *E/*M rule", {
+  skip_unless_live_key()
+  acs <- CensusACS$new()
+  dt <- acs$get_acs(
+    2023,
+    "acs1",
+    variables = c("NAME", "B01001_001E", "B19013_001E", "B19013_001M"),
+    geo_for = "county:*",
+    geo_in = "state:06"
+  )
+  expect_s3_class(dt, "data.table")
+  expect_gt(nrow(dt), 40L)
+  expect_type(dt$b01001_001e, "double")
+  expect_type(dt$b19013_001m, "double")
+  expect_true(all(c("name", "state", "county") %in% names(dt)))
+})
+
+test_that("get_acs_group returns a live ACS table group", {
+  skip_unless_live_key()
+  acs <- CensusACS$new()
+  dt <- acs$get_acs_group(2023, "acs1", group = "B19013", geo_for = "state:*")
+  expect_gt(nrow(dt), 50L)
+  expect_true("b19013_001e" %in% names(dt))
+})
+
+test_that("census_acs_labels returns live variable labels", {
+  skip_unless_live()
+  lbl <- census_acs_labels(2023, "acs1", variables = c("B19013_001E"))
+  expect_identical(nrow(lbl), 1L)
+  expect_match(lbl$label, "income", ignore.case = TRUE)
+})
+
+test_that("census_backfill_acs stacks live survey years", {
+  skip_unless_live_key()
+  dt <- census_backfill_acs(
+    from = 2021,
+    to = 2023,
+    dataset = "acs1",
+    variables = c("NAME", "B19013_001E"),
+    geo_for = "state:*"
+  )
+  expect_true("year" %in% names(dt))
+  expect_setequal(unique(dt$year), c(2021L, 2022L, 2023L))
+})
+
+test_that("get_acs rejects an ambiguous specific geography before the keyed call (keyless requires check)", {
+  skip_unless_live()
+  acs <- CensusACS$new(api_key = "does-not-matter-validation-is-preflight")
+  err <- tryCatch(
+    acs$get_acs(2023, "acs1", c("NAME", "B01001_001E"), geo_for = "county:037"),
+    error = function(e) e
+  )
+  expect_s3_class(err, "census_validation_error")
+  expect_match(conditionMessage(err), "requires parent")
+})

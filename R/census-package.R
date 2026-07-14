@@ -45,5 +45,6 @@ utils::globalVariables(c(
   "time_slot_date",
   "datetime",
   "program",
-  "geo_level"
+  "geo_level",
+  "year"
 ))

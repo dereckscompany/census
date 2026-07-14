@@ -56,8 +56,13 @@ parse_census_response <- function(resp) {
   content_type <- tryCatch(httr2::resp_content_type(resp), error = function(e) NA_character_)
   body_text <- tryCatch(httr2::resp_body_string(resp), error = function(e) "")
 
+  # The key page is identified primarily by the redirected final URL. The
+  # content-type fallback is gated on an HTTP 200: a data query only yields a 200
+  # text/html body via the followed missing/invalid-key redirect, whereas a
+  # non-2xx text/html body is a genuine error page (e.g. a 404 for an ACS survey
+  # year the Bureau never released) and must NOT be mistaken for a key problem.
   is_key_page <- (!is.null(final_url) && grepl("(missing|invalid)_key\\.html", final_url)) ||
-    (!is.na(content_type) && grepl("text/html", content_type, fixed = TRUE))
+    (status == 200L && !is.na(content_type) && grepl("text/html", content_type, fixed = TRUE))
 
   result <- NULL
   if (is_key_page) {
@@ -155,5 +160,28 @@ census_eits_query <- function(time, category_code, data_type_code, seasonally_ad
     data_type_code = data_type_code,
     seasonally_adj = seasonally_adj,
     `for` = geo_for
+  ))
+}
+
+#' Build the ACS get/for/in query
+#'
+#' Assembles the wide-grammar query: a `get=` clause (a comma-separated variable
+#' list or a `group(...)` selector) plus the `for`/`in` geography clauses. A `NULL`
+#' `geo_in` is pruned downstream by `connectcore::build_request()`. The `key` is
+#' appended later by the `.sign()` seam.
+#'
+#' @param get_value (scalar<character>) the `get=` value: a comma-separated
+#'   variable list, or `"group(<id>)"`.
+#' @param geo_for (scalar<character>) the geography `for` clause (wire key `for`).
+#' @param geo_in (scalar<character> | NULL) the `in` clause (wire key `in`).
+#' @return (list) the query list.
+#' @keywords internal
+#' @noassert
+#' @noRd
+census_acs_query <- function(get_value, geo_for, geo_in) {
+  return(list(
+    get = get_value,
+    `for` = geo_for,
+    `in` = geo_in
   ))
 }

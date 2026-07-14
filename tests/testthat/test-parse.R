@@ -89,3 +89,31 @@ test_that("parse_geography_list joins requires with ';' and NA-fills a missing l
   expect_identical(acs$requires[acs$name == "county"], "state")
   expect_identical(acs$requires[acs$name == "county subdivision"], "state;county")
 })
+
+test_that("acs_numeric_cols applies the *E/*M rule, checking annotation suffixes first", {
+  header <- c("NAME", "B01001_001E", "B19013_001M", "B19013_001EA", "B19013_001MA", "GEO_ID", "state")
+  expect_setequal(acs_numeric_cols(header), c("B01001_001E", "B19013_001M"))
+})
+
+test_that("parse_acs types estimate/margin numeric, annotations/codes character, null -> NA", {
+  parsed <- list(
+    list("NAME", "B19013_001E", "B19013_001M", "B19013_001EA", "state"),
+    list("Testland", "65000", "500", NULL, "90"),
+    list("Otherland", NULL, NULL, NULL, "91")
+  )
+  dt <- parse_acs(parsed, c("NAME", "B19013_001E", "B19013_001M", "B19013_001EA"))
+  expect_type(dt$b19013_001e, "double")
+  expect_type(dt$b19013_001m, "double")
+  expect_type(dt$b19013_001ea, "character")
+  expect_type(dt$state, "character")
+  expect_true(is.na(dt$b19013_001e[2L]))
+})
+
+test_that("parse_acs empty fallback is a typed zero-row table built from the requested variables", {
+  dt <- parse_acs(NULL, c("NAME", "B19013_001E", "B19013_001EA"))
+  expect_s3_class(dt, "data.table")
+  expect_identical(nrow(dt), 0L)
+  expect_true(all(c("name", "b19013_001e", "b19013_001ea") %in% names(dt)))
+  expect_type(dt$b19013_001e, "double")
+  expect_type(dt$b19013_001ea, "character")
+})

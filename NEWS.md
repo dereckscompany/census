@@ -1,3 +1,15 @@
+# census 0.2.0
+
+Phase 2 — the American Community Survey (ACS): the demographic aggregates the owner personally wanted.
+
+In plain English: this release adds the survey behind official US income, employment, and population figures for every geography (state, county, city, right down to a city block group), so we can ask "what does this place look like" the same typed, tested way we ask "how did retail sales move".
+
+- `CensusACS`: the ACS aggregate client. `get_acs()` pulls any set of variables (up to 50) for any geography as a wide table — one row per place, one column per variable, estimates and margins numeric, annotations and codes character. `get_acs_group()` pulls a whole table at once via the API's `group(...)` selector. Both `acs1` (1-year) and `acs5` (5-year); synchronous and asynchronous.
+- `census_backfill_acs()`: stacks the same variables across a range of survey years into one table with a `year` column. Because each survey year is a separate dataset, a year the Bureau never released (e.g. 1-year 2020) is skipped with a warning rather than aborting the pull.
+- `census_acs_labels()`: a cheap keyless lookup of the human-readable labels for a set of ACS variables, to interpret the wide table's terse column codes.
+- Geography validation against the `requires` chains, grounded to the live API's real behaviour: a wildcard child (`county:*`) may omit its parents, but a fully-qualified one (`county:037`) must supply them; an unknown level is caught before a keyed call.
+- Envelope fix: a non-200 `text/html` body (such as the 404 for an unreleased survey year) is now surfaced as a plain HTTP error rather than being mistaken for the missing/invalid-key page.
+
 # census 0.1.0
 
 Initial release: US Census Bureau data in the fleet's connector idiom — the owner-commissioned "we never know until we try" package.
