@@ -1,3 +1,16 @@
+# census 0.1.0
+
+Initial release: US Census Bureau data in the fleet's connector idiom — the owner-commissioned "we never know until we try" package.
+
+In plain English: this package fetches official US government statistics — how many new businesses were started each week, how retail sales moved each month, how many homes broke ground — through one typed, tested interface that works both synchronously and asynchronously, so our research and any future strategy can consume government data exactly the way it consumes exchange data.
+
+- CensusEconomicIndicators: the EITS time-series family — get_series() plus named helpers for weekly Business Formation Statistics, the advance retail report (MARTS), advance durable goods, and housing starts; sync + async threaded from the constructor via connectcore.
+- Keyless discovery layer: census_datasets(), census_variables(), census_geographies() — browse the Bureau's full catalogue without a key.
+- census_backfill_series(): standalone multi-year history pulls.
+- Faithful typed shapes (EitsSeries et al.) with every column documented as typed bullets — cell_value is numeric | NA because the Bureau legitimately suppresses cells; structural columns strict.
+- Typed conditions from birth (census_api_error into the connectcore chain; census_validation_error under census_error), with the Bureau's missing/invalid-key HTML redirect detected and raised as a clear activation-naming error — and a test proving no error ever leaks key material.
+- Grounded against the live API with an activated key (20 live tests) and fully-synthetic fixtures offline (134 tests); three design assumptions corrected against reality (time is required; predicate-echo duplicate columns; the national geography level has no code).
+
 # census 0.0.1
 
 Initial release: a US Census Bureau Data API connector over the shared `connectcore` transport base.
