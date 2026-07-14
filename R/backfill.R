@@ -107,3 +107,103 @@ census_backfill_series <- function(
   }
   return(assert_return_census_backfill_series(result))
 }
+
+#' Backfill an ACS variable set across survey years
+#'
+#' @description
+#' Pulls the same ACS variables and geography across a range of survey years and
+#' stacks them into one long table, adding a `year` column to distinguish the
+#' vintages. A thin loop over [CensusACS]'s `get_acs()`, one request per year.
+#'
+#' @details
+#' Each ACS year is a separate dataset (there is no `time` predicate), so this
+#' iterates `from:to` and requests each year in turn. **A year the Bureau did not
+#' release** (e.g. standard `acs1` 2020) returns an HTTP error; that year is
+#' **skipped with a warning** rather than aborting the whole backfill. The
+#' geography's `requires` chain is validated once up front (not per year). The
+#' result is the dynamic-width [AcsTable][census_shapes] with a prepended `year`
+#' (integer) column; column presence still follows the requested variables.
+#'
+#' @param from (scalar<count in [2005, Inf[>) the first survey year (inclusive).
+#' @param to (scalar<count in [2005, Inf[>) the last survey year (inclusive).
+#' @param dataset (scalar<character>) the ACS dataset, `"acs1"` or `"acs5"`.
+#' @param variables (vector<character, 1..>) the `get=` variables (max 50).
+#' @param geo_for (scalar<character>) the geography `for` clause; default `"us"`.
+#' @param geo_in (scalar<character> | NULL) the `in` clause; default `NULL`.
+#' @param api_key (scalar<character>) the Census API key. Defaults to the
+#'   `CENSUS_API_KEY` environment variable.
+#' @param base_url (scalar<character>) the Census Data API base URL. Defaults to
+#'   [census_base_url()].
+#' @param sleep (scalar<numeric in [0, Inf[>) seconds to pause between years.
+#'   Default `0`.
+#' @return (data.table) the stacked multi-year AcsTable with a `year` column
+#'   (empty `data.table` with a `year` column if no year returned data).
+#'
+#' @examples
+#' \dontrun{
+#' income <- census_backfill_acs(
+#'   from = 2018, to = 2023, dataset = "acs1",
+#'   variables = c("NAME", "B19013_001E"), geo_for = "state:*"
+#' )
+#' }
+#'
+#' @importFrom data.table rbindlist setcolorder
+#' @export
+census_backfill_acs <- function(
+  from,
+  to,
+  dataset = "acs1",
+  variables,
+  geo_for = "us",
+  geo_in = NULL,
+  api_key = census_api_key(),
+  base_url = census_base_url(),
+  sleep = 0
+) {
+  assert_args_census_backfill_acs(from, to, dataset, variables, geo_for, geo_in, api_key, base_url, sleep)
+  if (to < from) {
+    abort_census_validation_error(sprintf("`to` (%d) must be >= `from` (%d).", as.integer(to), as.integer(from)))
+  }
+  client <- CensusACS$new(api_key = api_key, base_url = base_url, async = FALSE)
+  years <- seq.int(as.integer(from), as.integer(to))
+  # Validate the geography once (against the most recent year's metadata), then
+  # skip the per-year pre-flight.
+  geographies_ref <- census_geographies(paste0(as.integer(to), "/acs/", dataset), base_url = base_url, async = FALSE)
+  census_validate_acs_geo(geo_for, geo_in, geographies_ref)
+  frames <- list()
+  for (survey_year in years) {
+    frame <- tryCatch(
+      client$get_acs(
+        year = survey_year,
+        dataset = dataset,
+        variables = variables,
+        geo_for = geo_for,
+        geo_in = geo_in,
+        validate_geo = FALSE
+      ),
+      census_api_error = function(e) {
+        rlang::warn(sprintf(
+          "census_backfill_acs: %s %d unavailable (HTTP %s); skipping.",
+          dataset,
+          survey_year,
+          e[["status"]]
+        ))
+        return(NULL)
+      }
+    )
+    if (!is.null(frame) && nrow(frame) > 0L) {
+      year_value <- as.integer(survey_year)
+      frame[, year := year_value]
+      frames[[length(frames) + 1L]] <- frame
+    }
+    if (sleep > 0) {
+      Sys.sleep(sleep)
+    }
+  }
+  result <- data.table::data.table(year = integer(0L))
+  if (length(frames) > 0L) {
+    result <- data.table::rbindlist(frames, fill = TRUE, use.names = TRUE)
+    data.table::setcolorder(result, "year")
+  }
+  return(assert_return_census_backfill_acs(result))
+}

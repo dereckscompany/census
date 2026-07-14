@@ -118,3 +118,26 @@ SEASONALLY_ADJ <- list(
   yes = "yes",
   no = "no"
 )
+
+#' American Community Survey (ACS) datasets
+#'
+#' The two ACS aggregate datasets addressable under `/data/{year}/acs/<code>`. The
+#' 1-year survey (`acs1`) covers geographies of at least 65,000 population; the
+#' 5-year survey (`acs5`) covers every geography down to the block group. Each
+#' survey *year* is its own dataset (there is no `time` predicate); the vintage is
+#' the path's `{year}` segment.
+#'
+#' @format A named `list` of `scalar<character>` path segments: `acs1`, `acs5`.
+#' @export
+ACS_DATASETS <- list(
+  acs1 = "acs1",
+  acs5 = "acs5"
+)
+
+#' Maximum variables per Census data query
+#'
+#' The Census Data API caps the `get=` list at 50 variables per call.
+#'
+#' @format A `scalar<integer>`.
+#' @export
+CENSUS_MAX_VARIABLES <- 50L

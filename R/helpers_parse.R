@@ -55,15 +55,20 @@ census_parse_time_slot <- function(x) {
 #'
 #' @param parsed (list) the parsed array-of-arrays (`jsonlite::fromJSON` with
 #'   `simplifyVector = FALSE`): `parsed[[1]]` is the header, the rest are rows.
-#' @param numeric_cols (character | NULL) column names to coerce to numeric.
+#' @param numeric_cols (character | NULL) column names (already snake-cased with
+#'   `snake_fn`) to coerce to numeric.
+#' @param snake_fn (function) the header-name normaliser. Default
+#'   [connectcore::to_snake_case()] (EITS); ACS passes `census_acs_snake` because
+#'   ACS variable codes like `B01001_001E` must lower-case to `b01001_001e`, not be
+#'   camel-split to `b01001_001_e`.
 #' @return (class<data.table>) the bound table, character columns except those in
 #'   `numeric_cols`.
 #' @importFrom data.table as.data.table
 #' @keywords internal
 #' @noassert
 #' @noRd
-census_rows_to_dt <- function(parsed, numeric_cols = NULL) {
-  header <- connectcore::to_snake_case(vapply(parsed[[1L]], as.character, character(1L)))
+census_rows_to_dt <- function(parsed, numeric_cols = NULL, snake_fn = connectcore::to_snake_case) {
+  header <- snake_fn(vapply(parsed[[1L]], as.character, character(1L)))
   data_rows <- parsed[-1L]
   keep <- !duplicated(header)
   cols <- list()
@@ -306,6 +311,101 @@ parse_geography_list <- function(parsed) {
       }),
       fill = TRUE
     )
+  }
+  return(result)
+}
+
+# ---- ACS (wide, dynamic-width) ----
+
+#' Normalise an ACS header name to a column name
+#'
+#' Lower-cases and turns spaces into underscores, WITHOUT camelCase-splitting: an
+#' ACS variable code `B01001_001E` becomes `b01001_001e` (not `b01001_001_e`), the
+#' geography level `"block group"` becomes `block_group`, and `GEO_ID` / `NAME`
+#' become `geo_id` / `name`.
+#'
+#' @param x (character) the raw header names.
+#' @return (character) the column names.
+#' @keywords internal
+#' @noassert
+#' @noRd
+census_acs_snake <- function(x) {
+  return(gsub(" ", "_", tolower(x), fixed = TRUE))
+}
+
+#' Which header names are ACS numeric (estimate/margin) columns?
+#'
+#' Applies the estimate/margin suffix rule to the ACS *variable-code* columns only.
+#' A numeric column matches `_<digits>[P]?[EM]$` (an estimate `*E`, margin `*M`, or
+#' profile `*PE`/`*PM`); an annotation column matches `_<digits>[P]?[EM]A$`
+#' (`*EA`/`*MA`) and stays character. Anchoring on `_<digits>` before the suffix is
+#' what stops `NAME` (which merely ends in "E") from being mistaken for an estimate.
+#'
+#' @param header (character) the raw header names.
+#' @return (character) the subset that are estimate/margin (numeric) columns.
+#' @keywords internal
+#' @noassert
+#' @noRd
+acs_numeric_cols <- function(header) {
+  is_annotation <- grepl("_[0-9]+P?[EM]A$", header)
+  is_estimate_or_moe <- grepl("_[0-9]+P?[EM]$", header)
+  return(header[!is_annotation & is_estimate_or_moe])
+}
+
+#' Build a typed zero-row ACS table from the requested variables
+#'
+#' The dynamic-width empty fallback for an empty-body ACS response: one column per
+#' requested variable (snake_cased, typed by the `*E`/`*M` rule) plus a `name`
+#' column. Never column-less. When the request is a `group(...)` (no explicit
+#' variable list), returns a minimal single-column `name` table.
+#'
+#' @param variables (character) the requested `get=` variables (may be empty for a
+#'   group query).
+#' @return (class<data.table>) a zero-row typed table.
+#' @keywords internal
+#' @noassert
+#' @noRd
+empty_acs_from_variables <- function(variables) {
+  result <- data.table::data.table(name = character(0L))
+  vars <- setdiff(variables, "NAME")
+  if (length(vars) > 0L) {
+    numeric_vars <- acs_numeric_cols(vars)
+    cols <- lapply(vars, function(v) {
+      out <- character(0L)
+      if (v %in% numeric_vars) {
+        out <- numeric(0L)
+      }
+      return(out)
+    })
+    names(cols) <- census_acs_snake(vars)
+    result <- data.table::as.data.table(c(list(name = character(0L)), cols))
+  }
+  return(result)
+}
+
+#' Parse an ACS wide array-of-arrays into the AcsTable shape
+#'
+#' Header-driven: binds by name, then coerces the estimate/margin columns to
+#' numeric by the `*E`/`*M` suffix rule (`*EA`/`*MA` annotations and NAME/GEO_ID/
+#' geography-code columns stay character). Works for both an explicit variable list
+#' and a `group(...)` query (the numeric columns are detected from the header, so
+#' no variable list is needed for group queries).
+#'
+#' @param parsed (list | NULL) the parsed array-of-arrays, or `NULL` for an empty
+#'   body.
+#' @param variables (character) the requested variables (used only for the
+#'   empty-body typed fallback). Default `character(0)`.
+#' @return (class<data.table>) the wide AcsTable.
+#' @importFrom data.table as.data.table
+#' @keywords internal
+#' @noassert
+#' @noRd
+parse_acs <- function(parsed, variables = character(0L)) {
+  result <- empty_acs_from_variables(variables)
+  if (!is.null(parsed) && length(parsed) >= 1L) {
+    header_raw <- vapply(parsed[[1L]], as.character, character(1L))
+    numeric_snake <- census_acs_snake(acs_numeric_cols(header_raw))
+    result <- census_rows_to_dt(parsed, numeric_cols = numeric_snake, snake_fn = census_acs_snake)
   }
   return(result)
 }

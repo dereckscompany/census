@@ -1,0 +1,20 @@
+{
+  "variables": {
+    "B01001_001E": {
+      "label": "Estimate!!Total:",
+      "concept": "Sex by Age",
+      "predicateType": "int",
+      "group": "B01001"
+    },
+    "B19013_001E": {
+      "label": "Estimate!!Median household income in the past 12 months",
+      "concept": "Median Household Income in the Past 12 Months",
+      "predicateType": "int",
+      "group": "B19013"
+    },
+    "NAME": {
+      "label": "Geographic Area Name",
+      "predicateType": "string"
+    }
+  }
+}
