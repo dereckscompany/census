@@ -22,7 +22,7 @@
 
     <a class="navbar-brand me-2" href="index.html">census</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -48,7 +48,7 @@
   <main id="main" class="col-md-9"><div class="section level1">
 <div class="page-header"><h1 id="census">census<a class="anchor" aria-label="anchor" href="#census"></a>
 </h1></div>
-<p>R API wrapper to the US Census Bureau Data API supporting both synchronous and asynchronous (promise based) operations. Provides R6 classes for the Economic Indicators Time Series (EITS) family and keyless dataset, variable, and geography discovery, built on the shared <a href="https://github.com/dereckscompany/connectcore" class="external-link">connectcore</a> transport base.</p>
+<p>R API wrapper to the US Census Bureau Data API supporting both synchronous and asynchronous (promise based) operations. Provides R6 classes for the Economic Indicators Time Series (EITS) family and the American Community Survey (ACS) demographic aggregates, plus keyless dataset, variable, and geography discovery, built on the shared <a href="https://github.com/dereckscompany/connectcore" class="external-link">connectcore</a> transport base.</p>
 <div class="section level2">
 <h2 id="what-this-is">What this is<a class="anchor" aria-label="anchor" href="#what-this-is"></a>
 </h2>
@@ -153,10 +153,50 @@
 <span id="cb8-17"><a href="#cb8-17" tabindex="-1"></a><span class="co">#&gt; 4:       060 county subdivision state;county</span></span></code></pre></div>
 </div>
 <div class="section level2">
+<h2 id="american-community-survey-acs">American Community Survey (ACS)<a class="anchor" aria-label="anchor" href="#american-community-survey-acs"></a>
+</h2>
+<p>ACS gives income, employment, and demographics for every US geography, as a wide table — one row per geography, one column per requested variable. Estimate (<code>*E</code>) and margin-of-error (<code>*M</code>) columns are numeric; annotation and code columns are character.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">acs</span> <span class="op">&lt;-</span> <span class="va"><a href="reference/CensusACS.html">CensusACS</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">ca</span> <span class="op">&lt;-</span> <span class="va">acs</span><span class="op">$</span><span class="fu">get_acs</span><span class="op">(</span></span>
+<span>    <span class="fl">2023</span>, <span class="st">"acs1"</span>,</span>
+<span>    variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"NAME"</span>, <span class="st">"B01001_001E"</span>, <span class="st">"B19013_001E"</span><span class="op">)</span>,</span>
+<span>    geo_for <span class="op">=</span> <span class="st">"county:*"</span>, geo_in <span class="op">=</span> <span class="st">"state:06"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">ca</span></span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="co">#&gt;                      name b01001_001e b19013_001e b19013_001m b19013_001ea</span></span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="co">#&gt;                    &lt;char&gt;       &lt;num&gt;       &lt;num&gt;       &lt;num&gt;       &lt;char&gt;</span></span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a><span class="co">#&gt; 1: Alpha County, Testland      100000       65000         500         &lt;NA&gt;</span></span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="co">#&gt; 2:  Beta County, Testland      250000       82000        1200         &lt;NA&gt;</span></span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a><span class="co">#&gt; 3: Gamma County, Testland        5000          NA          NA         &lt;NA&gt;</span></span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a><span class="co">#&gt; 4: Delta County, Testland        1200  -666666666  -555555555         &lt;NA&gt;</span></span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a><span class="co">#&gt;     state county</span></span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a><span class="co">#&gt;    &lt;char&gt; &lt;char&gt;</span></span>
+<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a><span class="co">#&gt; 1:     90    001</span></span>
+<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a><span class="co">#&gt; 2:     90    003</span></span>
+<span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a><span class="co">#&gt; 3:     90    005</span></span>
+<span id="cb10-12"><a href="#cb10-12" tabindex="-1"></a><span class="co">#&gt; 4:     90    007</span></span></code></pre></div>
+<p>Each survey year is its own dataset (there is no <code>time</code> predicate), so a multi-year pull iterates the years and stacks them with a <code>year</code> column — a year the Bureau never released (e.g. 1-year 2020) is skipped:</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">income</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/census_backfill_acs.html">census_backfill_acs</a></span><span class="op">(</span></span>
+<span>    from <span class="op">=</span> <span class="fl">2018</span>, to <span class="op">=</span> <span class="fl">2023</span>, dataset <span class="op">=</span> <span class="st">"acs1"</span>,</span>
+<span>    variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"NAME"</span>, <span class="st">"B19013_001E"</span><span class="op">)</span>, geo_for <span class="op">=</span> <span class="st">"state:*"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>The wide columns are terse variable codes; look up their labels from the keyless dictionary:</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="reference/census_acs_labels.html">census_acs_labels</a></span><span class="op">(</span><span class="fl">2023</span>, <span class="st">"acs1"</span>, variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"B01001_001E"</span>, <span class="st">"B19013_001E"</span><span class="op">)</span><span class="op">)</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span><span class="va">name</span>, <span class="va">label</span><span class="op">)</span><span class="op">]</span></span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="co">#&gt;           name                                                   label</span></span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a><span class="co">#&gt;         &lt;char&gt;                                                  &lt;char&gt;</span></span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a><span class="co">#&gt; 1: B01001_001E                                        Estimate!!Total:</span></span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a><span class="co">#&gt; 2: B19013_001E Estimate!!Median household income in the past 12 months</span></span></code></pre></div>
+<p>The whole grammar validates against the geography <code>requires</code> chains before spending a keyed call: a wildcard child (<code>county:*</code>) may omit its parents, but a specific one (<code>county:037</code>) must supply them — mirroring the API exactly.</p>
+</div>
+<div class="section level2">
 <h2 id="asynchronous-usage">Asynchronous usage<a class="anchor" aria-label="anchor" href="#asynchronous-usage"></a>
 </h2>
 <p>Set <code>async = TRUE</code> and consume the promise with <code><a href="https://coro.r-lib.org/reference/async.html" class="external-link">coro::async</a></code> / <code>await</code>, driving the event loop with <code>later</code>:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">box</span><span class="fu">::</span><span class="fu"><a href="https://klmr.me/box/reference/use.html" class="external-link">use</a></span><span class="op">(</span><span class="va">coro</span>, <span class="va">later</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">eits_async</span> <span class="op">&lt;-</span> <span class="va"><a href="reference/CensusEconomicIndicators.html">CensusEconomicIndicators</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>async <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
@@ -174,7 +214,7 @@
 <h2 id="multi-year-backfill">Multi-year backfill<a class="anchor" aria-label="anchor" href="#multi-year-backfill"></a>
 </h2>
 <p><code><a href="reference/census_backfill_series.html">census_backfill_series()</a></code> pages the <code>time</code> predicate across a range of years, deduplicates, and returns one tidy series:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">retail</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/census_backfill_series.html">census_backfill_series</a></span><span class="op">(</span></span>
 <span>    <span class="st">"marts"</span>,</span>
 <span>    from <span class="op">=</span> <span class="fl">2015</span>, to <span class="op">=</span> <span class="fl">2024</span>,</span>
@@ -189,13 +229,13 @@
 <div class="section level2">
 <h2 id="error-handling">Error handling<a class="anchor" aria-label="anchor" href="#error-handling"></a>
 </h2>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="kw"><a href="https://rdrr.io/r/base/conditions.html" class="external-link">tryCatch</a></span><span class="op">(</span></span>
 <span>    <span class="va">eits</span><span class="op">$</span><span class="fu">get_series</span><span class="op">(</span><span class="st">"not_a_program"</span>, time <span class="op">=</span> <span class="st">"2024"</span><span class="op">)</span>,</span>
 <span>    census_validation_error <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">e</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"caught:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/conditions.html" class="external-link">conditionMessage</a></span><span class="op">(</span><span class="va">e</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span><span class="va">result</span></span></code></pre></div>
-<div class="sourceCode" id="cb12"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="co">#&gt; [1] "caught: Invalid EITS program 'not_a_program'. Valid programs: bfs, marts, mrts, mwts, mtis, m3, advm3, ftd, ftdadv, resconst, ressales, vip, qss, hv."</span></span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a><span class="co">#&gt; [1] "caught: Invalid EITS program 'not_a_program'. Valid programs: bfs, marts, mrts, mwts, mtis, m3, advm3, ftd, ftdadv, resconst, ressales, vip, qss, hv."</span></span></code></pre></div>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">

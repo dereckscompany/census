@@ -9,6 +9,17 @@ The EITS client and the standalone multi-year backfill.
 - [`census_backfill_series()`](https://dereckscompany.github.io/census/reference/census_backfill_series.md)
   : Backfill a multi-year EITS series
 
+## American Community Survey (ACS)
+
+The ACS aggregate client, the multi-vintage backfill, and label lookup.
+
+- [`CensusACS`](https://dereckscompany.github.io/census/reference/CensusACS.md)
+  : CensusACS: American Community Survey aggregates
+- [`census_backfill_acs()`](https://dereckscompany.github.io/census/reference/census_backfill_acs.md)
+  : Backfill an ACS variable set across survey years
+- [`census_acs_labels()`](https://dereckscompany.github.io/census/reference/census_acs_labels.md)
+  : Look up human-readable labels for ACS variables (keyless)
+
 ## Keyless discovery
 
 Introspect the catalogue and dataset metadata with no API key.
@@ -48,6 +59,12 @@ The shared transport base, URL getters, key reader, and constants.
 
 - [`SEASONALLY_ADJ`](https://dereckscompany.github.io/census/reference/SEASONALLY_ADJ.md)
   : Seasonal-adjustment predicate vocabulary
+
+- [`ACS_DATASETS`](https://dereckscompany.github.io/census/reference/ACS_DATASETS.md)
+  : American Community Survey (ACS) datasets
+
+- [`CENSUS_MAX_VARIABLES`](https://dereckscompany.github.io/census/reference/CENSUS_MAX_VARIABLES.md)
+  : Maximum variables per Census data query
 
 ## Conditions and shapes
 

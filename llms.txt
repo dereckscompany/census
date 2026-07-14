@@ -2,8 +2,9 @@
 
 R API wrapper to the US Census Bureau Data API supporting both
 synchronous and asynchronous (promise based) operations. Provides R6
-classes for the Economic Indicators Time Series (EITS) family and
-keyless dataset, variable, and geography discovery, built on the shared
+classes for the Economic Indicators Time Series (EITS) family and the
+American Community Survey (ACS) demographic aggregates, plus keyless
+dataset, variable, and geography discovery, built on the shared
 [connectcore](https://github.com/dereckscompany/connectcore) transport
 base.
 
@@ -156,6 +157,72 @@ census_geographies("2023/acs/acs1")
 #> 4:       060 county subdivision state;county
 ```
 
+## American Community Survey (ACS)
+
+ACS gives income, employment, and demographics for every US geography,
+as a wide table — one row per geography, one column per requested
+variable. Estimate (`*E`) and margin-of-error (`*M`) columns are
+numeric; annotation and code columns are character.
+
+``` r
+
+acs <- CensusACS$new()
+
+ca <- acs$get_acs(
+    2023, "acs1",
+    variables = c("NAME", "B01001_001E", "B19013_001E"),
+    geo_for = "county:*", geo_in = "state:06"
+)
+ca
+```
+
+``` R
+#>                      name b01001_001e b19013_001e b19013_001m b19013_001ea
+#>                    <char>       <num>       <num>       <num>       <char>
+#> 1: Alpha County, Testland      100000       65000         500         <NA>
+#> 2:  Beta County, Testland      250000       82000        1200         <NA>
+#> 3: Gamma County, Testland        5000          NA          NA         <NA>
+#> 4: Delta County, Testland        1200  -666666666  -555555555         <NA>
+#>     state county
+#>    <char> <char>
+#> 1:     90    001
+#> 2:     90    003
+#> 3:     90    005
+#> 4:     90    007
+```
+
+Each survey year is its own dataset (there is no `time` predicate), so a
+multi-year pull iterates the years and stacks them with a `year` column
+— a year the Bureau never released (e.g. 1-year 2020) is skipped:
+
+``` r
+
+income <- census_backfill_acs(
+    from = 2018, to = 2023, dataset = "acs1",
+    variables = c("NAME", "B19013_001E"), geo_for = "state:*"
+)
+```
+
+The wide columns are terse variable codes; look up their labels from the
+keyless dictionary:
+
+``` r
+
+census_acs_labels(2023, "acs1", variables = c("B01001_001E", "B19013_001E"))[, .(name, label)]
+```
+
+``` R
+#>           name                                                   label
+#>         <char>                                                  <char>
+#> 1: B01001_001E                                        Estimate!!Total:
+#> 2: B19013_001E Estimate!!Median household income in the past 12 months
+```
+
+The whole grammar validates against the geography `requires` chains
+before spending a keyed call: a wildcard child (`county:*`) may omit its
+parents, but a specific one (`county:037`) must supply them — mirroring
+the API exactly.
+
 ## Asynchronous usage
 
 Set `async = TRUE` and consume the promise with
@@ -228,6 +295,17 @@ The EITS client and the standalone multi-year backfill.
 - [`census_backfill_series()`](https://dereckscompany.github.io/census/reference/census_backfill_series.md)
   : Backfill a multi-year EITS series
 
+## American Community Survey (ACS)
+
+The ACS aggregate client, the multi-vintage backfill, and label lookup.
+
+- [`CensusACS`](https://dereckscompany.github.io/census/reference/CensusACS.md)
+  : CensusACS: American Community Survey aggregates
+- [`census_backfill_acs()`](https://dereckscompany.github.io/census/reference/census_backfill_acs.md)
+  : Backfill an ACS variable set across survey years
+- [`census_acs_labels()`](https://dereckscompany.github.io/census/reference/census_acs_labels.md)
+  : Look up human-readable labels for ACS variables (keyless)
+
 ## Keyless discovery
 
 Introspect the catalogue and dataset metadata with no API key.
@@ -267,6 +345,12 @@ The shared transport base, URL getters, key reader, and constants.
 
 - [`SEASONALLY_ADJ`](https://dereckscompany.github.io/census/reference/SEASONALLY_ADJ.md)
   : Seasonal-adjustment predicate vocabulary
+
+- [`ACS_DATASETS`](https://dereckscompany.github.io/census/reference/ACS_DATASETS.md)
+  : American Community Survey (ACS) datasets
+
+- [`CENSUS_MAX_VARIABLES`](https://dereckscompany.github.io/census/reference/CENSUS_MAX_VARIABLES.md)
+  : Maximum variables per Census data query
 
 ## Conditions and shapes
 

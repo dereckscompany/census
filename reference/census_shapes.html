@@ -21,7 +21,7 @@ own return contract."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">census</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -42,7 +42,7 @@ own return contract."></head><body>
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>census return shapes</h1>
-      <small class="dont-index">Source: <a href="https://github.com/dereckscompany/census/blob/v0.1.0/R/types_census.R" class="external-link"><code>R/types_census.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/dereckscompany/census/blob/v0.2.0/R/types_census.R" class="external-link"><code>R/types_census.R</code></a></small>
       <div class="d-none name"><code>census_shapes.Rd</code></div>
     </div>
 
@@ -58,6 +58,29 @@ own return contract.</p>
     </div>
 
 
+    <div class="section level2">
+    <h2 id="acstable-a-dynamic-width-shape-">AcsTable (a dynamic-width shape)<a class="anchor" aria-label="anchor" href="#acstable-a-dynamic-width-shape-"></a></h2>
+
+
+<p><code>get_acs()</code> / <code>get_acs_group()</code> return a <strong>dynamic-width</strong> <code>data.table</code> — one row
+per geography, whose columns depend on the <code>variables</code> requested and the geography
+queried — so it is documented as a shape here rather than pinned to a fixed column
+contract (the method's <code>@return</code> is <code>(data.table | promise&lt;data.table&gt;)</code>, and only
+the <code>data.table</code> class is asserted at the boundary). For the worked example
+<code>get_acs(2023, "acs1", c("NAME", "B01001_001E", "B19013_001E"), geo_for = "county:*", geo_in = "state:06")</code>
+the columns are:</p><ul><li><p>name (character | NA) the geography label, from the NAME variable, e.g. "Los Angeles County"; structural.</p></li>
+<li><p>b01001_001e (numeric | NA) total-population estimate (an <code>*E</code> estimate variable); measurement.</p></li>
+<li><p>b19013_001e (numeric | NA) median-household-income estimate; measurement.</p></li>
+<li><p>state (character) the state FIPS code, e.g. "06"; a geography-code column, structural.</p></li>
+<li><p>county (character) the county FIPS code, e.g. "037"; a geography-code column, structural.</p></li>
+</ul><p>The typing <strong>rule</strong> for the dynamic columns (applied by the parser to each header
+name, checking the annotation suffixes first):</p><ul><li><p><code>*EA</code> / <code>*MA</code> annotation-flag columns are (character | NA).</p></li>
+<li><p><code>*E</code> / <code>*M</code> (and profile <code>*PE</code> / <code>*PM</code>) estimate and margin-of-error columns are (numeric | NA); the Bureau's
+suppression/annotation sentinels (large negative "jam" values) are kept verbatim, not coerced to NA.</p></li>
+<li><p>NAME, GEO_ID, other string variables, and every geography-code column (state, county, tract, block group, ...)
+are (character | NA); geography-code columns are always populated in practice.</p></li>
+<li><p><code><a href="census_backfill_acs.html">census_backfill_acs()</a></code> prepends a <code>year</code> (integer) column, the survey vintage, to distinguish stacked years.</p></li>
+</ul></div>
 
   </main></div>
 

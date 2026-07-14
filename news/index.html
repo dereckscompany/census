@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">census</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -28,9 +28,22 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/dereckscompany/census/blob/v0.1.0/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/dereckscompany/census/blob/v0.2.0/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.2.0" id="census-020">census 0.2.0<a class="anchor" aria-label="anchor" href="#census-020"></a></h2><p class="text-muted">CRAN release: 2017-10-26</p>
+<p>Phase 2 — the American Community Survey (ACS): the demographic aggregates the owner personally wanted.</p>
+<p>In plain English: this release adds the survey behind official US income, employment, and population figures for every geography (state, county, city, right down to a city block group), so we can ask “what does this place look like” the same typed, tested way we ask “how did retail sales move”.</p>
+<ul><li>
+<code>CensusACS</code>: the ACS aggregate client. <code>get_acs()</code> pulls any set of variables (up to 50) for any geography as a wide table — one row per place, one column per variable, estimates and margins numeric, annotations and codes character. <code>get_acs_group()</code> pulls a whole table at once via the API’s <code>group(...)</code> selector. Both <code>acs1</code> (1-year) and <code>acs5</code> (5-year); synchronous and asynchronous.</li>
+<li>
+<code><a href="../reference/census_backfill_acs.html">census_backfill_acs()</a></code>: stacks the same variables across a range of survey years into one table with a <code>year</code> column. Because each survey year is a separate dataset, a year the Bureau never released (e.g. 1-year 2020) is skipped with a warning rather than aborting the pull.</li>
+<li>
+<code><a href="../reference/census_acs_labels.html">census_acs_labels()</a></code>: a cheap keyless lookup of the human-readable labels for a set of ACS variables, to interpret the wide table’s terse column codes.</li>
+<li>Geography validation against the <code>requires</code> chains, grounded to the live API’s real behaviour: a wildcard child (<code>county:*</code>) may omit its parents, but a fully-qualified one (<code>county:037</code>) must supply them; an unknown level is caught before a keyed call.</li>
+<li>Envelope fix: a non-200 <code>text/html</code> body (such as the 404 for an unreleased survey year) is now surfaced as a plain HTTP error rather than being mistaken for the missing/invalid-key page.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0" id="census-010">census 0.1.0<a class="anchor" aria-label="anchor" href="#census-010"></a></h2><p class="text-muted">CRAN release: 2017-10-23</p>
 <p>Initial release: US Census Bureau data in the fleet’s connector idiom — the owner-commissioned “we never know until we try” package.</p>
