@@ -1,0 +1,8 @@
+{
+  "default": [
+    { "isDefault": "true" }
+  ],
+  "fips": [
+    { "name": "us" }
+  ]
+}

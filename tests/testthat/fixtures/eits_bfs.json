@@ -1,0 +1,6 @@
+[
+  ["cell_value", "category_code", "data_type_code", "seasonally_adj", "time_slot_id", "time_slot_name", "time_slot_date", "error_data", "time", "category_code", "data_type_code", "us"],
+  ["500000", "TOTAL", "BA_BA", "no", "0", "Jan2024", "2024-01-01 00:00:00.0", "no", "2024-01", "TOTAL", "BA_BA", "1"],
+  ["460000", "TOTAL", "BA_BA", "no", "0", "Feb2024", "2024-02-01 00:00:00.0", "no", "2024-02", "TOTAL", "BA_BA", "1"],
+  ["471200", "TOTAL", "BA_BA", "no", "0", "Mar2024", "2024-03-01 00:00:00.0", "no", "2024-03", "TOTAL", "BA_BA", "1"]
+]

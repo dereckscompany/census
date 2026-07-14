@@ -63,3 +63,7 @@ vignettes/*.pdf
 
 # machine
 .DS_Store
+
+# testthat scratch
+tests/testthat/_problems/
+tests/testthat/_snaps/

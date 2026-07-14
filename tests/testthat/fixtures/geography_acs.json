@@ -1,0 +1,8 @@
+{
+  "fips": [
+    { "geoLevelDisplay": "010", "name": "us" },
+    { "geoLevelDisplay": "040", "name": "state" },
+    { "geoLevelDisplay": "050", "name": "county", "requires": ["state"] },
+    { "geoLevelDisplay": "060", "name": "county subdivision", "requires": ["state", "county"] }
+  ]
+}

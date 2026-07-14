@@ -1,0 +1,32 @@
+{
+  "dataset": [
+    {
+      "title": "Advance Monthly Sales for Retail and Food Services",
+      "c_dataset": ["timeseries", "eits", "marts"],
+      "c_isTimeseries": true,
+      "identifier": "http://api.census.gov/data/id/EITSMARTS",
+      "c_variablesLink": "http://api.census.gov/data/timeseries/eits/marts/variables.json",
+      "c_geographyLink": "http://api.census.gov/data/timeseries/eits/marts/geography.json"
+    },
+    {
+      "title": "American Community Survey 1-Year Estimates",
+      "c_dataset": ["2023", "acs", "acs1"],
+      "c_isTimeseries": false,
+      "c_isMicrodata": false,
+      "c_vintage": 2023,
+      "identifier": "http://api.census.gov/data/id/ACSDT1Y2023",
+      "c_variablesLink": "http://api.census.gov/data/2023/acs/acs1/variables.json",
+      "c_geographyLink": "http://api.census.gov/data/2023/acs/acs1/geography.json"
+    },
+    {
+      "title": "Current Population Survey: Basic Monthly",
+      "c_dataset": ["2024", "cps", "basic", "jan"],
+      "c_isTimeseries": false,
+      "c_isMicrodata": true,
+      "c_vintage": 2024,
+      "identifier": "http://api.census.gov/data/id/CPSBASIC2024JAN",
+      "c_variablesLink": "http://api.census.gov/data/2024/cps/basic/jan/variables.json",
+      "c_geographyLink": "http://api.census.gov/data/2024/cps/basic/jan/geography.json"
+    }
+  ]
+}
