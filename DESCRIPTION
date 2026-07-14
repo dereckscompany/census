@@ -1,6 +1,6 @@
 Package: census
 Title: API Wrapper to the US Census Bureau Data API
-Version: 0.0.0.9000
+Version: 0.0.1
 URL: https://dereckscompany.github.io/census,
     https://github.com/dereckscompany/census
 BugReports: https://github.com/dereckscompany/census/issues
@@ -13,20 +13,35 @@ Authors@R:
 Description: R API wrapper to the US Census Bureau Data API supporting both synchronous and asynchronous (promise based) operations. Provides R6 classes for the Economic Indicators Time Series (EITS) family and keyless dataset, variable, and geography discovery, built on the shared connectcore transport base.
 License: MIT
 Encoding: UTF-8
-Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.3
+Roxygen: list(markdown = TRUE, roclets = c("namespace", "rd", "roxyassert::contract_roclet"))
+Depends: R (>= 4.1.0)
+Imports:
+    R6,
+    rlang,
+    jsonlite,
+    data.table,
+    httr2 (>= 1.0.0),
+    lubridate,
+    assert,
+    connectcore (>= 0.4.0)
 Suggests:
     box,
+    coro,
     covr,
     DT,
-    ggplot2,
     knitr,
+    later,
+    promises,
     lintr,
-    microbenchmark,
     pkgdown,
     rcmdcheck,
     rmarkdown,
+    roxyassert (>= 0.9.1),
     testthat (>= 3.0.0)
-VignetteBuilder: knitr
+Remotes:
+    dereckscompany/assert,
+    dereckscompany/connectcore,
+    dereckscompany/roxyassert
 Config/testthat/edition: 3
-
+Config/roxygen2/version: 7.3.3
+RoxygenNote: 7.3.3

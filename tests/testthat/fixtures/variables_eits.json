@@ -1,0 +1,29 @@
+{
+  "variables": {
+    "cell_value": {
+      "label": "data value",
+      "predicateType": "string",
+      "required": "true",
+      "group": "N/A",
+      "concept": "Required Variables"
+    },
+    "category_code": {
+      "label": "Industry list",
+      "predicateType": "string",
+      "required": "true",
+      "group": "N/A",
+      "concept": "Required Variables"
+    },
+    "time_slot_date": {
+      "label": "Time Slot Date",
+      "predicateType": "string",
+      "group": "N/A",
+      "concept": "Required Variables"
+    },
+    "for": {
+      "label": "Census API FIPS 'for' clause",
+      "predicateType": "fips-for",
+      "group": "N/A"
+    }
+  }
+}

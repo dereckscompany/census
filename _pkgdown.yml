@@ -5,7 +5,7 @@ template:
 
 navbar:
   structure:
-    left: [intro, reference, articles]
+    left: [reference]
     right: [search, github]
   components:
     github:
@@ -14,13 +14,29 @@ navbar:
       aria-label: GitHub repository
 
 reference:
-  - title: R Functions
-    desc: Pure R functions
+  - title: Economic Indicators Time Series (EITS)
+    desc: The EITS client and the standalone multi-year backfill.
     contents:
-      - add
-
-articles:
-  - title: Getting Started
-    navbar: ~
+      - CensusEconomicIndicators
+      - census_backfill_series
+  - title: Keyless discovery
+    desc: Introspect the catalogue and dataset metadata with no API key.
     contents:
-      - demo
+      - census_datasets
+      - census_variables
+      - census_geographies
+  - title: Base class and configuration
+    desc: The shared transport base, URL getters, key reader, and constants.
+    contents:
+      - CensusBase
+      - census_base_url
+      - census_catalogue_url
+      - census_api_key
+      - EITS_PROGRAMS
+      - EITS_GET_VARS
+      - SEASONALLY_ADJ
+  - title: Conditions and shapes
+    desc: The typed condition family and the documented return shapes.
+    contents:
+      - census_conditions
+      - census_shapes
