@@ -8,7 +8,7 @@
 ## Citation
 
 Source:
-[`inst/CITATION`](https://github.com/dereckscompany/census/blob/master/inst/CITATION)
+[`inst/CITATION`](https://github.com/dereckscompany/census/blob/v0.1.0/inst/CITATION)
 
 Mezquita D (2026). *census: API Wrapper to the US Census Bureau Data
 API*. R package version 0.1.0,
