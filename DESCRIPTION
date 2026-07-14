@@ -1,6 +1,6 @@
 Package: census
 Title: API Wrapper to the US Census Bureau Data API
-Version: 0.0.1
+Version: 0.1.0
 URL: https://dereckscompany.github.io/census,
     https://github.com/dereckscompany/census
 BugReports: https://github.com/dereckscompany/census/issues
