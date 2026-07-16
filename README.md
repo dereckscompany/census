@@ -1,6 +1,20 @@
 
 # census
 
+**In plain terms:** the US Census Bureau is the official source of many
+of the government’s hard economic numbers — how much shops are selling,
+how many new houses are being started, how many new businesses are being
+formed, how much the country trades with the rest of the world. Several
+of these figures move markets the moment they are published. This
+package fetches those official statistics directly from the Census
+Bureau and hands them back as clean tables you can work with in R, and
+it also reaches the Bureau’s population and demographic surveys (income,
+employment, and who lives where). Looking up what data exists needs no
+sign-up; pulling the numbers themselves needs a free key. It fetches and
+tidies the figures faithfully and leaves the interpretation to you.
+
+## Technical overview
+
 R API wrapper to the US Census Bureau Data API supporting both
 synchronous and asynchronous (promise based) operations. Provides R6
 classes for the Economic Indicators Time Series (EITS) family and the
