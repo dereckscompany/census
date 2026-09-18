@@ -54,7 +54,7 @@ It is a faithful, low-level wrapper: it speaks the Bureau's peculiar wire format
 ## Design philosophy
 
 - **`data.table` everywhere, no list columns.** Every method returns one flat `data.table`; measurement columns are typed nullable, structural columns strict.
-- **Sync and async.** Every request-making surface works in both modes. `async = TRUE` returns a [promise][promises::promise]; otherwise the table is returned directly. There is a single sync/async branch point (inherited from `connectcore`).
+- **Sync and async.** Every request-making surface works in both modes. `async = TRUE` returns a [promise](https://rstudio.github.io/promises/); otherwise the table is returned directly. There is a single sync/async branch point (inherited from `connectcore`).
 - **Keyless discovery.** The catalogue, per-dataset variable dictionaries, and geography hierarchies need no key, so you can validate a query before spending a keyed call.
 - **Typed errors.** Every failure is a classed condition (`census_api_error`, `census_validation_error`) carrying structured fields — you branch on the type, never grep the message.
 
