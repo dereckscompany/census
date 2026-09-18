@@ -43,9 +43,10 @@ and returns clean tables, but it does not editorialise the data.
   flat `data.table`; measurement columns are typed nullable, structural
   columns strict.
 - **Sync and async.** Every request-making surface works in both modes.
-  `async = TRUE` returns a \[promise\]\[promises::promise\]; otherwise
-  the table is returned directly. There is a single sync/async branch
-  point (inherited from `connectcore`).
+  `async = TRUE` returns a
+  [promise](https://rstudio.github.io/promises/); otherwise the table is
+  returned directly. There is a single sync/async branch point
+  (inherited from `connectcore`).
 - **Keyless discovery.** The catalogue, per-dataset variable
   dictionaries, and geography hierarchies need no key, so you can
   validate a query before spending a keyed call.
