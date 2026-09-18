@@ -27,7 +27,7 @@ census_int_or_na <- function(x) {
 #' Parse an EITS time-slot date to POSIXct (UTC)
 #'
 #' The EITS `time_slot_date` field arrives as `"2024-02-01 00:00:00.0"` (some
-#' programs omit the time part); both are parsed to a reference-period POSIXct in
+#' programmes omit the time part); both are parsed to a reference-period POSIXct in
 #' UTC. Unparseable values become `NA`.
 #'
 #' @param x (character) the time-slot date string(s).
@@ -124,7 +124,7 @@ empty_dt_eits_series <- function() {
 #'
 #' @param parsed (list | NULL) the parsed array-of-arrays, or `NULL` for an empty
 #'   body.
-#' @param program (scalar<character>) the EITS program code (a constant column).
+#' @param program (scalar<character>) the EITS programme code (a constant column).
 #' @param geo_level (scalar<character>) the geography level, e.g. "us".
 #' @return (EitsSeries) the tidy series.
 #' @importFrom data.table data.table setorderv

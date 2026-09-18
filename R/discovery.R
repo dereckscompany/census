@@ -45,7 +45,7 @@ census_datasets <- function(catalogue_url = census_catalogue_url(), async = FALS
 #' key is required.
 #'
 #' @details
-#' Sourced from the dataset's `variables.json`. For an EITS program this is the
+#' Sourced from the dataset's `variables.json`. For an EITS programme this is the
 #' fixed measurement/predicate set (`cell_value`, `category_code`, ...); for an
 #' ACS vintage it is tens of thousands of estimate/margin variables. Use it to
 #' validate a variable name before a data call.
@@ -77,7 +77,7 @@ census_variables <- function(dataset_path, base_url = census_base_url(), async =
 #' parent level(s) an `in` clause must satisfy. No API key is required.
 #'
 #' @details
-#' Sourced from the dataset's `geography.json`. The EITS programs return the single
+#' Sourced from the dataset's `geography.json`. The EITS programmes return the single
 #' national `us` level; ACS returns the full hierarchy (region, state, county,
 #' place, ... down to block group), with `requires` naming the parents a query
 #' must supply. Use it to validate a geography query against the hierarchy before a

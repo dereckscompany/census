@@ -24,7 +24,7 @@ Returns the geography levels a dataset serves, and for each nested level the
 parent level(s) an \verb{in} clause must satisfy. No API key is required.
 }
 \details{
-Sourced from the dataset's \code{geography.json}. The EITS programs return the single
+Sourced from the dataset's \code{geography.json}. The EITS programmes return the single
 national \code{us} level; ACS returns the full hierarchy (region, state, county,
 place, ... down to block group), with \code{requires} naming the parents a query
 must supply. Use it to validate a geography query against the hierarchy before a

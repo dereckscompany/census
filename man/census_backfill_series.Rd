@@ -18,7 +18,7 @@ census_backfill_series(
 )
 }
 \arguments{
-\item{program}{(scalar<character>) the EITS program code, one of
+\item{program}{(scalar<character>) the EITS programme code, one of
 \code{names(EITS_PROGRAMS)}, e.g. \code{"marts"}.}
 
 \item{from}{(scalar<count in [1900, Inf[>) the first year to pull (inclusive).}
@@ -49,7 +49,7 @@ requests. Default \code{0}.}
 (EitsSeries) the deduplicated, sorted multi-year series.
 }
 \description{
-Pulls an EITS program's history across a range of years in one call, returning
+Pulls an EITS programme's history across a range of years in one call, returning
 a single tidy \link[=census_shapes]{EitsSeries} table. A thin loop over
 \link{CensusEconomicIndicators}'s \code{get_series()}, one request per year, with the
 results deduplicated and sorted.
@@ -61,7 +61,7 @@ seconds between requests. Rows are deduplicated by
 \verb{(datetime, category_code, data_type_code, seasonally_adj)} and sorted. Narrow
 the pull with \code{category_code} / \code{data_type_code} / \code{seasonally_adj} for a
 specific series; leaving them \code{NULL} returns every combination, which for a wide
-program over many years is a large table.
+programme over many years is a large table.
 
 Point-in-time caveat: the Census API returns only latest-revised values, so a
 backfill is current-vintage only -- a look-ahead trap for a backtest. See

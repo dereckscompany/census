@@ -20,8 +20,8 @@
 #' own return contract.
 #' @name census_shapes
 #'
-#' @type EitsSeries (data.table) one tidy row per (period x category x data_type x adjustment) of an EITS program:
-#' - program (character) the EITS program code, e.g. "marts"; structural.
+#' @type EitsSeries (data.table) one tidy row per (period x category x data_type x adjustment) of an EITS programme:
+#' - program (character) the EITS programme code, e.g. "marts"; structural.
 #' - category_code (character) the industry/segment code, e.g. "44000"; structural.
 #' - data_type_code (character) the item-type code (sales, inventory, level, month-over-month change); structural.
 #' - seasonally_adj (character) "yes" or "no", as served by the Bureau; structural.

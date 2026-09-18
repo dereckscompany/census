@@ -7,7 +7,7 @@
 Retrieves the US Census Bureau's Economic Indicators Time Series (EITS) — the
 national economic prints such as advance retail sales (MARTS), business
 formation (BFS), advance durable-goods orders (ADVM3), and new residential
-construction (RESCONST). Every program is queried the same way and returns the
+construction (RESCONST). Every programme is queried the same way and returns the
 same tidy \link[=census_shapes]{EitsSeries} shape.
 }
 \details{
@@ -45,7 +45,7 @@ retail <- eits$get_series(
   category_code = "44000", data_type_code = "SM",
   seasonally_adj = "yes", time = "from 2019 to 2024"
 )
-# Convenience wrappers pin the program:
+# Convenience wrappers pin the programme:
 bfs <- eits$get_business_formation(time = "2024")
 
 # Asynchronous:
@@ -84,7 +84,7 @@ while (!later::loop_empty()) later::run_now()
 \if{html}{\out{<a id="method-CensusEconomicIndicators-get_series"></a>}}
 \if{latex}{\out{\hypertarget{method-CensusEconomicIndicators-get_series}{}}}
 \subsection{Method \code{get_series()}}{
-Retrieve an EITS program's tidy series, filtered by the given
+Retrieve an EITS programme's tidy series, filtered by the given
 predicates. \code{time} is required (the API rejects a query without it);
 accepts a year (\code{"2024"}, all its periods), a month (\code{"2024-03"}), or a
 range (\code{"from 2020 to 2024"}). A \code{NULL} \code{category_code} /
@@ -103,7 +103,7 @@ range (\code{"from 2020 to 2024"}). A \code{NULL} \code{category_code} /
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{program}}{(scalar<character>) the EITS program code, one of
+\item{\code{program}}{(scalar<character>) the EITS programme code, one of
 \code{names(EITS_PROGRAMS)}, e.g. \code{"marts"}.}
 
 \item{\code{category_code}}{(scalar<character> | NULL) the industry/segment

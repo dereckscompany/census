@@ -25,7 +25,7 @@ with its label, concept, and whether it is required in a \verb{get=} list. No AP
 key is required.
 }
 \details{
-Sourced from the dataset's \code{variables.json}. For an EITS program this is the
+Sourced from the dataset's \code{variables.json}. For an EITS programme this is the
 fixed measurement/predicate set (\code{cell_value}, \code{category_code}, ...); for an
 ACS vintage it is tens of thousands of estimate/margin variables. Use it to
 validate a variable name before a data call.

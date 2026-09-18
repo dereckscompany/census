@@ -12,7 +12,7 @@
 #' - [CensusEconomicIndicators]: the Economic Indicators Time Series (EITS)
 #'   family -- retail sales (MARTS), business formation (BFS), durable goods
 #'   (ADVM3), new residential construction (RESCONST), and every other EITS
-#'   program via the general `get_series()`.
+#'   programme via the general `get_series()`.
 #' - Keyless discovery: [census_datasets()], [census_variables()],
 #'   [census_geographies()] introspect the catalogue and dataset metadata with
 #'   no API key required.

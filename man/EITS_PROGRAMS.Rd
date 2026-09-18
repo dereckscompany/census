@@ -3,7 +3,7 @@
 \docType{data}
 \name{EITS_PROGRAMS}
 \alias{EITS_PROGRAMS}
-\title{EITS program codes served by the Census Data API}
+\title{EITS programme codes served by the Census Data API}
 \format{
 A named \code{list} of \verb{scalar<character>} path segments:
 \itemize{
@@ -27,7 +27,7 @@ A named \code{list} of \verb{scalar<character>} path segments:
 EITS_PROGRAMS
 }
 \description{
-The Economic Indicators Time Series (EITS) programs addressable under
+The Economic Indicators Time Series (EITS) programmes addressable under
 \verb{/data/timeseries/eits/<code>}. The name and value coincide (the code \emph{is} the
 path segment); the named list is the whitelist \code{get_series()} validates the
 \code{program} argument against.
