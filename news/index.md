@@ -1,17 +1,50 @@
 # Changelog
 
+## census 0.2.2
+
+This release tidies how the documentation reads; it changes no code.
+
+A prose sweep found two things worth fixing: a handful of doc paragraphs
+opened with a “plain English” scaffolding label instead of just writing
+the plain sentence, and several comments describing the Census Bureau’s
+economic-indicator schemes used the American spelling “program” rather
+than the house British spelling “programme”. Both are fixed; no
+argument, column, or function name changed, and no behaviour changed.
+
+- Removed 4 leading “In plain terms:” / “In plain English:” labels,
+  keeping the sentence that followed as the plain lead: 3 in NEWS.md, 1
+  in README.Rmd (re-rendered to README.md via
+  `scripts/BUILD.sh readme`).
+- Changed 26 American-to-British spellings (“program”/“programs” -\>
+  “programme”/“programmes”) in prose comments and roxygen text only; the
+  `program` argument, `program`/`program_path` columns, and the
+  `EITS_PROGRAMS` constant are untouched. Files touched:
+  - `README.Rmd`
+  - `NEWS.md`
+  - `R/discovery.R`
+  - `R/census-package.R`
+  - `R/backfill.R`
+  - `R/constants.R`
+  - `R/types_census.R`
+  - `R/helpers_parse.R`
+  - `R/CensusEconomicIndicators.R`
+  - `tests/testthat/mock_router.R`
+- Regenerated `man/` via `scripts/BUILD.sh document` for the seven pages
+  built from the changed roxygen text; full test suite green (188
+  passed, 12 live tests skipped as usual without `CENSUS_LIVE_TESTS`).
+
 ## census 0.2.1
 
 Fix the rendered README: a cross-reference to the promises package was
 showing up as literal escaped brackets instead of a link.
 
-In plain English: the README described asynchronous calls using an R
-help-page cross-reference syntax that only resolves inside R’s own help
-viewer. GitHub does not understand that syntax, so the rendered README
-on GitHub showed the literal text “\[promise\]\[promises::promise\]”
-instead of a working link. This release replaces it with a plain
-markdown link, matching the fix already shipped in the hyperliquid and
-polymarket connectors.
+The README described asynchronous calls using an R help-page
+cross-reference syntax that only resolves inside R’s own help viewer.
+GitHub does not understand that syntax, so the rendered README on GitHub
+showed the literal text “\[promise\]\[promises::promise\]” instead of a
+working link. This release replaces it with a plain markdown link,
+matching the fix already shipped in the hyperliquid and polymarket
+connectors.
 
 - README.Rmd: replaced the Rd-style `[promise][promises::promise]`
   cross-reference with a plain markdown link to
@@ -25,11 +58,10 @@ CRAN release: 2017-10-26
 Phase 2 — the American Community Survey (ACS): the demographic
 aggregates the owner personally wanted.
 
-In plain English: this release adds the survey behind official US
-income, employment, and population figures for every geography (state,
-county, city, right down to a city block group), so we can ask “what
-does this place look like” the same typed, tested way we ask “how did
-retail sales move”.
+This release adds the survey behind official US income, employment, and
+population figures for every geography (state, county, city, right down
+to a city block group), so we can ask “what does this place look like”
+the same typed, tested way we ask “how did retail sales move”.
 
 - `CensusACS`: the ACS aggregate client. `get_acs()` pulls any set of
   variables (up to 50) for any geography as a wide table — one row per
@@ -60,12 +92,12 @@ CRAN release: 2017-10-23
 Initial release: US Census Bureau data in the fleet’s connector idiom —
 the owner-commissioned “we never know until we try” package.
 
-In plain English: this package fetches official US government statistics
-— how many new businesses were started each week, how retail sales moved
-each month, how many homes broke ground — through one typed, tested
-interface that works both synchronously and asynchronously, so our
-research and any future strategy can consume government data exactly the
-way it consumes exchange data.
+This package fetches official US government statistics — how many new
+businesses were started each week, how retail sales moved each month,
+how many homes broke ground — through one typed, tested interface that
+works both synchronously and asynchronously, so our research and any
+future strategy can consume government data exactly the way it consumes
+exchange data.
 
 - CensusEconomicIndicators: the EITS time-series family — get_series()
   plus named helpers for weekly Business Formation Statistics, the
@@ -102,11 +134,11 @@ Initial release: a US Census Bureau Data API connector over the shared
   `httr2` follows the redirect) and surfaces it as a typed
   `census_api_error_401` naming the key activation requirement.
 - `CensusEconomicIndicators`: the Economic Indicators Time Series (EITS)
-  family. `get_series()` covers every EITS program (predicate-driven:
+  family. `get_series()` covers every EITS programme (predicate-driven:
   `time`, `category_code`, `data_type_code`, `seasonally_adj`), with
   `get_business_formation()`, `get_retail_advance()`,
   `get_durable_goods_advance()`, and `get_housing_starts()` pinning the
-  market-moving programs. Both synchronous and asynchronous (promise)
+  market-moving programmes. Both synchronous and asynchronous (promise)
   modes.
 - [`census_backfill_series()`](https://dereckscompany.github.io/census/reference/census_backfill_series.md):
   a standalone, instance-free multi-year EITS pull that pages the `time`

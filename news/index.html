@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">census</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -28,19 +28,38 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/dereckscompany/census/blob/v0.2.1/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/dereckscompany/census/blob/master/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
     <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.2.2" id="census-022">census 0.2.2<a class="anchor" aria-label="anchor" href="#census-022"></a></h2>
+<p>This release tidies how the documentation reads; it changes no code.</p>
+<p>A prose sweep found two things worth fixing: a handful of doc paragraphs opened with a “plain English” scaffolding label instead of just writing the plain sentence, and several comments describing the Census Bureau’s economic-indicator schemes used the American spelling “program” rather than the house British spelling “programme”. Both are fixed; no argument, column, or function name changed, and no behaviour changed.</p>
+<ul><li>Removed 4 leading “In plain terms:” / “In plain English:” labels, keeping the sentence that followed as the plain lead: 3 in NEWS.md, 1 in README.Rmd (re-rendered to README.md via <code>scripts/BUILD.sh readme</code>).</li>
+<li>Changed 26 American-to-British spellings (“program”/“programs” -&gt; “programme”/“programmes”) in prose comments and roxygen text only; the <code>program</code> argument, <code>program</code>/<code>program_path</code> columns, and the <code>EITS_PROGRAMS</code> constant are untouched. Files touched:
+<ul><li><code>README.Rmd</code></li>
+<li><code>NEWS.md</code></li>
+<li><code>R/discovery.R</code></li>
+<li><code>R/census-package.R</code></li>
+<li><code>R/backfill.R</code></li>
+<li><code>R/constants.R</code></li>
+<li><code>R/types_census.R</code></li>
+<li><code>R/helpers_parse.R</code></li>
+<li><code>R/CensusEconomicIndicators.R</code></li>
+<li><code>tests/testthat/mock_router.R</code></li>
+</ul></li>
+<li>Regenerated <code>man/</code> via <code>scripts/BUILD.sh document</code> for the seven pages built from the changed roxygen text; full test suite green (188 passed, 12 live tests skipped as usual without <code>CENSUS_LIVE_TESTS</code>).</li>
+</ul></div>
+    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.2.1" id="census-021">census 0.2.1<a class="anchor" aria-label="anchor" href="#census-021"></a></h2>
 <p>Fix the rendered README: a cross-reference to the promises package was showing up as literal escaped brackets instead of a link.</p>
-<p>In plain English: the README described asynchronous calls using an R help-page cross-reference syntax that only resolves inside R’s own help viewer. GitHub does not understand that syntax, so the rendered README on GitHub showed the literal text “[promise][promises::promise]” instead of a working link. This release replaces it with a plain markdown link, matching the fix already shipped in the hyperliquid and polymarket connectors.</p>
+<p>The README described asynchronous calls using an R help-page cross-reference syntax that only resolves inside R’s own help viewer. GitHub does not understand that syntax, so the rendered README on GitHub showed the literal text “[promise][promises::promise]” instead of a working link. This release replaces it with a plain markdown link, matching the fix already shipped in the hyperliquid and polymarket connectors.</p>
 <ul><li>README.Rmd: replaced the Rd-style <code>[promise][promises::promise]</code> cross-reference with a plain markdown link to <a href="https://rstudio.github.io/promises/" class="external-link uri">https://rstudio.github.io/promises/</a>, and re-rendered README.md via <code>scripts/BUILD.sh readme</code>.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.2.0" id="census-020">census 0.2.0<a class="anchor" aria-label="anchor" href="#census-020"></a></h2><p class="text-muted">CRAN release: 2017-10-26</p>
 <p>Phase 2 — the American Community Survey (ACS): the demographic aggregates the owner personally wanted.</p>
-<p>In plain English: this release adds the survey behind official US income, employment, and population figures for every geography (state, county, city, right down to a city block group), so we can ask “what does this place look like” the same typed, tested way we ask “how did retail sales move”.</p>
+<p>This release adds the survey behind official US income, employment, and population figures for every geography (state, county, city, right down to a city block group), so we can ask “what does this place look like” the same typed, tested way we ask “how did retail sales move”.</p>
 <ul><li>
 <code>CensusACS</code>: the ACS aggregate client. <code>get_acs()</code> pulls any set of variables (up to 50) for any geography as a wide table — one row per place, one column per variable, estimates and margins numeric, annotations and codes character. <code>get_acs_group()</code> pulls a whole table at once via the API’s <code>group(...)</code> selector. Both <code>acs1</code> (1-year) and <code>acs5</code> (5-year); synchronous and asynchronous.</li>
 <li>
@@ -53,7 +72,7 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0" id="census-010">census 0.1.0<a class="anchor" aria-label="anchor" href="#census-010"></a></h2><p class="text-muted">CRAN release: 2017-10-23</p>
 <p>Initial release: US Census Bureau data in the fleet’s connector idiom — the owner-commissioned “we never know until we try” package.</p>
-<p>In plain English: this package fetches official US government statistics — how many new businesses were started each week, how retail sales moved each month, how many homes broke ground — through one typed, tested interface that works both synchronously and asynchronously, so our research and any future strategy can consume government data exactly the way it consumes exchange data.</p>
+<p>This package fetches official US government statistics — how many new businesses were started each week, how retail sales moved each month, how many homes broke ground — through one typed, tested interface that works both synchronously and asynchronously, so our research and any future strategy can consume government data exactly the way it consumes exchange data.</p>
 <ul><li>CensusEconomicIndicators: the EITS time-series family — get_series() plus named helpers for weekly Business Formation Statistics, the advance retail report (MARTS), advance durable goods, and housing starts; sync + async threaded from the constructor via connectcore.</li>
 <li>Keyless discovery layer: census_datasets(), census_variables(), census_geographies() — browse the Bureau’s full catalogue without a key.</li>
 <li>census_backfill_series(): standalone multi-year history pulls.</li>
@@ -67,7 +86,7 @@
 <ul><li>
 <code>CensusBase</code>: abstract R6 base over <code><a href="https://dereckscompany.github.io/connectcore/reference/RestClient.html" class="external-link">connectcore::RestClient</a></code>, plugging the two Census seams — the query-parameter key sign seam and the array-of-arrays envelope. The envelope detects the missing/invalid-key HTML page (which arrives as an HTTP 200 because <code>httr2</code> follows the redirect) and surfaces it as a typed <code>census_api_error_401</code> naming the key activation requirement.</li>
 <li>
-<code>CensusEconomicIndicators</code>: the Economic Indicators Time Series (EITS) family. <code>get_series()</code> covers every EITS program (predicate-driven: <code>time</code>, <code>category_code</code>, <code>data_type_code</code>, <code>seasonally_adj</code>), with <code>get_business_formation()</code>, <code>get_retail_advance()</code>, <code>get_durable_goods_advance()</code>, and <code>get_housing_starts()</code> pinning the market-moving programs. Both synchronous and asynchronous (promise) modes.</li>
+<code>CensusEconomicIndicators</code>: the Economic Indicators Time Series (EITS) family. <code>get_series()</code> covers every EITS programme (predicate-driven: <code>time</code>, <code>category_code</code>, <code>data_type_code</code>, <code>seasonally_adj</code>), with <code>get_business_formation()</code>, <code>get_retail_advance()</code>, <code>get_durable_goods_advance()</code>, and <code>get_housing_starts()</code> pinning the market-moving programmes. Both synchronous and asynchronous (promise) modes.</li>
 <li>
 <code><a href="../reference/census_backfill_series.html">census_backfill_series()</a></code>: a standalone, instance-free multi-year EITS pull that pages the <code>time</code> predicate year-by-year, deduplicates, and returns one tidy <code>EitsSeries</code>.</li>
 <li>Keyless discovery: <code><a href="../reference/census_datasets.html">census_datasets()</a></code>, <code><a href="../reference/census_variables.html">census_variables()</a></code>, and <code><a href="../reference/census_geographies.html">census_geographies()</a></code> introspect the ~1,790-dataset catalogue and any dataset’s variable/geography metadata with no API key.</li>

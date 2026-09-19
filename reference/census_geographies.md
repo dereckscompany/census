@@ -32,7 +32,7 @@ or a promise thereof.
 
 ## Details
 
-Sourced from the dataset's `geography.json`. The EITS programs return
+Sourced from the dataset's `geography.json`. The EITS programmes return
 the single national `us` level; ACS returns the full hierarchy (region,
 state, county, place, ... down to block group), with `requires` naming
 the parents a query must supply. Use it to validate a geography query

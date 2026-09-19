@@ -22,7 +22,7 @@
 
     <a class="navbar-brand me-2" href="index.html">census</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -48,7 +48,7 @@
   <main id="main" class="col-md-9"><div class="section level1">
 <div class="page-header"><h1 id="census">census<a class="anchor" aria-label="anchor" href="#census"></a>
 </h1></div>
-<p><strong>In plain terms:</strong> the US Census Bureau is the official source of many of the government’s hard economic numbers — how much shops are selling, how many new houses are being started, how many new businesses are being formed, how much the country trades with the rest of the world. Several of these figures move markets the moment they are published. This package fetches those official statistics directly from the Census Bureau and hands them back as clean tables you can work with in R, and it also reaches the Bureau’s population and demographic surveys (income, employment, and who lives where). Looking up what data exists needs no sign-up; pulling the numbers themselves needs a free key. It fetches and tidies the figures faithfully and leaves the interpretation to you.</p>
+<p>The US Census Bureau is the official source of many of the government’s hard economic numbers — how much shops are selling, how many new houses are being started, how many new businesses are being formed, how much the country trades with the rest of the world. Several of these figures move markets the moment they are published. This package fetches those official statistics directly from the Census Bureau and hands them back as clean tables you can work with in R, and it also reaches the Bureau’s population and demographic surveys (income, employment, and who lives where). Looking up what data exists needs no sign-up; pulling the numbers themselves needs a free key. It fetches and tidies the figures faithfully and leaves the interpretation to you.</p>
 <div class="section level2">
 <h2 id="technical-overview">Technical overview<a class="anchor" aria-label="anchor" href="#technical-overview"></a>
 </h2>
@@ -93,7 +93,7 @@
 <div class="section level2">
 <h2 id="economic-indicators-eits">Economic indicators (EITS)<a class="anchor" aria-label="anchor" href="#economic-indicators-eits"></a>
 </h2>
-<p>Every EITS program is queried the same way: a required <code>time</code> predicate (a year, a month, or a <code>"from ... to ..."</code> range), optionally narrowed by <code>category_code</code>, <code>data_type_code</code>, and <code>seasonally_adj</code>. The result is long and tidy — one row per (period × category × data_type × adjustment).</p>
+<p>Every EITS programme is queried the same way: a required <code>time</code> predicate (a year, a month, or a <code>"from ... to ..."</code> range), optionally narrowed by <code>category_code</code>, <code>data_type_code</code>, and <code>seasonally_adj</code>. The result is long and tidy — one row per (period × category × data_type × adjustment).</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">eits</span> <span class="op">&lt;-</span> <span class="va"><a href="reference/CensusEconomicIndicators.html">CensusEconomicIndicators</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
@@ -111,7 +111,7 @@
 <span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a><span class="co">#&gt; 2:        Jan2023   612345.0         no        us</span></span>
 <span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a><span class="co">#&gt; 3:        Jan2023       12.3        yes        us</span></span>
 <span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a><span class="co">#&gt; 4:        Feb2023   618900.0         no        us</span></span></code></pre></div>
-<p>The convenience wrappers pin the program and document its release cadence:</p>
+<p>The convenience wrappers pin the programme and document its release cadence:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">bfs</span> <span class="op">&lt;-</span> <span class="va">eits</span><span class="op">$</span><span class="fu">get_business_formation</span><span class="op">(</span>time <span class="op">=</span> <span class="st">"2024"</span><span class="op">)</span></span>
 <span><span class="va">bfs</span></span></code></pre></div>

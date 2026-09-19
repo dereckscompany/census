@@ -3,7 +3,7 @@
 Retrieves the US Census Bureau's Economic Indicators Time Series (EITS)
 — the national economic prints such as advance retail sales (MARTS),
 business formation (BFS), advance durable-goods orders (ADVM3), and new
-residential construction (RESCONST). Every program is queried the same
+residential construction (RESCONST). Every programme is queried the same
 way and returns the same tidy
 [EitsSeries](https://dereckscompany.github.io/census/reference/census_shapes.md)
 shape.
@@ -67,7 +67,7 @@ Inherited methods
 
 ### Method `get_series()`
 
-Retrieve an EITS program's tidy series, filtered by the given
+Retrieve an EITS programme's tidy series, filtered by the given
 predicates. `time` is required (the API rejects a query without it);
 accepts a year (`"2024"`, all its periods), a month (`"2024-03"`), or a
 range (`"from 2020 to 2024"`). A `NULL` `category_code` /
@@ -89,7 +89,7 @@ dimension.
 
 - `program`:
 
-  (scalar\<character\>) the EITS program code, one of
+  (scalar\<character\>) the EITS programme code, one of
   `names(EITS_PROGRAMS)`, e.g. `"marts"`.
 
 - `category_code`:
@@ -350,7 +350,7 @@ retail <- eits$get_series(
   category_code = "44000", data_type_code = "SM",
   seasonally_adj = "yes", time = "from 2019 to 2024"
 )
-# Convenience wrappers pin the program:
+# Convenience wrappers pin the programme:
 bfs <- eits$get_business_formation(time = "2024")
 
 # Asynchronous:

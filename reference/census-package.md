@@ -14,8 +14,8 @@ format (a header row followed by string data rows) and returns tidy
 - [CensusEconomicIndicators](https://dereckscompany.github.io/census/reference/CensusEconomicIndicators.md):
   the Economic Indicators Time Series (EITS) family – retail sales
   (MARTS), business formation (BFS), durable goods (ADVM3), new
-  residential construction (RESCONST), and every other EITS program via
-  the general `get_series()`.
+  residential construction (RESCONST), and every other EITS programme
+  via the general `get_series()`.
 
 - Keyless discovery:
   [`census_datasets()`](https://dereckscompany.github.io/census/reference/census_datasets.md),

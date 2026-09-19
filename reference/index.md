@@ -52,7 +52,7 @@ The shared transport base, URL getters, key reader, and constants.
   : Read the Census API key from the environment
 
 - [`EITS_PROGRAMS`](https://dereckscompany.github.io/census/reference/EITS_PROGRAMS.md)
-  : EITS program codes served by the Census Data API
+  : EITS programme codes served by the Census Data API
 
 - [`EITS_GET_VARS`](https://dereckscompany.github.io/census/reference/EITS_GET_VARS.md)
   : The fixed EITS return-variable list

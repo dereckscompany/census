@@ -1,6 +1,6 @@
-# EITS program codes served by the Census Data API
+# EITS programme codes served by the Census Data API
 
-The Economic Indicators Time Series (EITS) programs addressable under
+The Economic Indicators Time Series (EITS) programmes addressable under
 `/data/timeseries/eits/<code>`. The name and value coincide (the code
 *is* the path segment); the named list is the whitelist `get_series()`
 validates the `program` argument against.

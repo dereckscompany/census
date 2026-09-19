@@ -33,7 +33,7 @@ variable, or a promise thereof.
 
 ## Details
 
-Sourced from the dataset's `variables.json`. For an EITS program this is
-the fixed measurement/predicate set (`cell_value`, `category_code`,
+Sourced from the dataset's `variables.json`. For an EITS programme this
+is the fixed measurement/predicate set (`cell_value`, `category_code`,
 ...); for an ACS vintage it is tens of thousands of estimate/margin
 variables. Use it to validate a variable name before a data call.
