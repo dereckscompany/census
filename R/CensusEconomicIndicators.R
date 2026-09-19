@@ -1,7 +1,7 @@
 # File: R/CensusEconomicIndicators.R
 # The EITS (Economic Indicators Time Series) client -- the priority family. Every
-# EITS program shares one predicate-driven grammar and one long/tidy shape, so a
-# single class with a general get_series() plus thin program-pinning convenience
+# EITS programme shares one predicate-driven grammar and one long/tidy shape, so a
+# single class with a general get_series() plus thin programme-pinning convenience
 # wrappers covers the whole family.
 
 #' CensusEconomicIndicators: Economic Indicators Time Series (EITS)
@@ -10,7 +10,7 @@
 #' Retrieves the US Census Bureau's Economic Indicators Time Series (EITS) — the
 #' national economic prints such as advance retail sales (MARTS), business
 #' formation (BFS), advance durable-goods orders (ADVM3), and new residential
-#' construction (RESCONST). Every program is queried the same way and returns the
+#' construction (RESCONST). Every programme is queried the same way and returns the
 #' same tidy [EitsSeries][census_shapes] shape.
 #'
 #' @details
@@ -47,7 +47,7 @@
 #'   category_code = "44000", data_type_code = "SM",
 #'   seasonally_adj = "yes", time = "from 2019 to 2024"
 #' )
-#' # Convenience wrappers pin the program:
+#' # Convenience wrappers pin the programme:
 #' bfs <- eits$get_business_formation(time = "2024")
 #'
 #' # Asynchronous:
@@ -67,12 +67,12 @@ CensusEconomicIndicators <- R6::R6Class(
   "CensusEconomicIndicators",
   inherit = CensusBase,
   public = list(
-    #' @description Retrieve an EITS program's tidy series, filtered by the given
+    #' @description Retrieve an EITS programme's tidy series, filtered by the given
     #'   predicates. `time` is required (the API rejects a query without it);
     #'   accepts a year (`"2024"`, all its periods), a month (`"2024-03"`), or a
     #'   range (`"from 2020 to 2024"`). A `NULL` `category_code` /
     #'   `data_type_code` / `seasonally_adj` returns every value of that dimension.
-    #' @param program (scalar<character>) the EITS program code, one of
+    #' @param program (scalar<character>) the EITS programme code, one of
     #'   `names(EITS_PROGRAMS)`, e.g. `"marts"`.
     #' @param category_code (scalar<character> | NULL) the industry/segment
     #'   predicate; `NULL` returns all categories.
@@ -253,7 +253,7 @@ CensusEconomicIndicators <- R6::R6Class(
     }
   ),
   private = list(
-    # Reject an unknown EITS program before spending a keyed request.
+    # Reject an unknown EITS programme before spending a keyed request.
     .validate_program = function(program) {
       if (!program %in% names(EITS_PROGRAMS)) {
         abort_census_validation_error(paste0(

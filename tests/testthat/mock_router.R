@@ -104,7 +104,7 @@ box::use(
   list(pattern = "/2019/acs/acs1", fixture = .fixtures$acs1_wide),
 
   # ---- Error surfaces (end-to-end) ----
-  # An otherwise-unfixtured program stands in for the missing-key redirect.
+  # An otherwise-unfixtured programme stands in for the missing-key redirect.
   list(pattern = "/timeseries/eits/mrts", fixture = .missing_key_response),
 
   # ---- Dataset catalogue (host root) ----

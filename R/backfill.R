@@ -7,7 +7,7 @@
 #' Backfill a multi-year EITS series
 #'
 #' @description
-#' Pulls an EITS program's history across a range of years in one call, returning
+#' Pulls an EITS programme's history across a range of years in one call, returning
 #' a single tidy [EitsSeries][census_shapes] table. A thin loop over
 #' [CensusEconomicIndicators]'s `get_series()`, one request per year, with the
 #' results deduplicated and sorted.
@@ -19,13 +19,13 @@
 #' `(datetime, category_code, data_type_code, seasonally_adj)` and sorted. Narrow
 #' the pull with `category_code` / `data_type_code` / `seasonally_adj` for a
 #' specific series; leaving them `NULL` returns every combination, which for a wide
-#' program over many years is a large table.
+#' programme over many years is a large table.
 #'
 #' Point-in-time caveat: the Census API returns only latest-revised values, so a
 #' backfill is current-vintage only -- a look-ahead trap for a backtest. See
 #' [CensusEconomicIndicators] for the mitigation.
 #'
-#' @param program (scalar<character>) the EITS program code, one of
+#' @param program (scalar<character>) the EITS programme code, one of
 #'   `names(EITS_PROGRAMS)`, e.g. `"marts"`.
 #' @param from (scalar<count in [1900, Inf[>) the first year to pull (inclusive).
 #' @param to (scalar<count in [1900, Inf[>) the last year to pull (inclusive).

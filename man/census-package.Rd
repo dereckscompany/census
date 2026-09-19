@@ -17,7 +17,7 @@ rows) and returns tidy \link[data.table:data.table]{data.table::data.table}s.
 \item \link{CensusEconomicIndicators}: the Economic Indicators Time Series (EITS)
 family -- retail sales (MARTS), business formation (BFS), durable goods
 (ADVM3), new residential construction (RESCONST), and every other EITS
-program via the general \code{get_series()}.
+programme via the general \code{get_series()}.
 \item Keyless discovery: \code{\link[=census_datasets]{census_datasets()}}, \code{\link[=census_variables]{census_variables()}},
 \code{\link[=census_geographies]{census_geographies()}} introspect the catalogue and dataset metadata with
 no API key required.

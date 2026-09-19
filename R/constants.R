@@ -43,9 +43,9 @@ census_api_key <- function() {
   return(connectcore::env_or("CENSUS_API_KEY"))
 }
 
-#' EITS program codes served by the Census Data API
+#' EITS programme codes served by the Census Data API
 #'
-#' The Economic Indicators Time Series (EITS) programs addressable under
+#' The Economic Indicators Time Series (EITS) programmes addressable under
 #' `/data/timeseries/eits/<code>`. The name and value coincide (the code *is* the
 #' path segment); the named list is the whitelist `get_series()` validates the
 #' `program` argument against.
@@ -85,10 +85,10 @@ EITS_PROGRAMS <- list(
 
 #' The fixed EITS return-variable list
 #'
-#' Every EITS program serves the same fixed variable set, so `get_series()`
+#' Every EITS programme serves the same fixed variable set, so `get_series()`
 #' always requests this list via the `get=` clause and filters with predicates
 #' (`time`, `category_code`, `data_type_code`, `seasonally_adj`). `time_slot_id`
-#' is included because some programs (e.g. RESCONST) require it in the `get=`
+#' is included because some programmes (e.g. RESCONST) require it in the `get=`
 #' list even though it is not surfaced in the returned shape.
 #'
 #' @format A `scalar<character>`: the comma-separated `get=` variable list.

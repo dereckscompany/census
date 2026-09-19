@@ -11,10 +11,10 @@ A \verb{scalar<character>}: the comma-separated \verb{get=} variable list.
 EITS_GET_VARS
 }
 \description{
-Every EITS program serves the same fixed variable set, so \code{get_series()}
+Every EITS programme serves the same fixed variable set, so \code{get_series()}
 always requests this list via the \verb{get=} clause and filters with predicates
 (\code{time}, \code{category_code}, \code{data_type_code}, \code{seasonally_adj}). \code{time_slot_id}
-is included because some programs (e.g. RESCONST) require it in the \verb{get=}
+is included because some programmes (e.g. RESCONST) require it in the \verb{get=}
 list even though it is not surfaced in the returned shape.
 }
 \keyword{datasets}
