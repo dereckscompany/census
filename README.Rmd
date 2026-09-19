@@ -39,13 +39,13 @@ Sys.setenv(CENSUS_API_KEY = "demo-key-for-mock-render")
 
 # census
 
+**census fetches the US Census Bureau's market-moving economic indicators and population surveys and hands them back as tidy R tables.**
+
 The US Census Bureau is the official source of many of the government's hard economic numbers — how much shops are selling, how many new houses are being started, how many new businesses are being formed, how much the country trades with the rest of the world. Several of these figures move markets the moment they are published. This package fetches those official statistics directly from the Census Bureau and hands them back as clean tables you can work with in R, and it also reaches the Bureau's population and demographic surveys (income, employment, and who lives where). Looking up what data exists needs no sign-up; pulling the numbers themselves needs a free key. It fetches and tidies the figures faithfully and leaves the interpretation to you.
 
 ## Technical overview
 
 R API wrapper to the US Census Bureau Data API supporting both synchronous and asynchronous (promise based) operations. Provides R6 classes for the Economic Indicators Time Series (EITS) family and the American Community Survey (ACS) demographic aggregates, plus keyless dataset, variable, and geography discovery, built on the shared [connectcore](https://github.com/dereckscompany/connectcore) transport base.
-
-## What this is
 
 The US Census Bureau runs one of the largest free public-data APIs in the world. Beyond the every-ten-years population count it publishes the government's **economic indicators** — retail sales, business formation, durable-goods orders, housing starts, international trade — several of which are genuine market-moving prints on release day. This package gives you those series as tidy `data.table`s, and lets you introspect the ~1,790-dataset catalogue with no API key.
 
@@ -68,7 +68,7 @@ renv::install("dereckscompany/census")
 # remotes::install_github("dereckscompany/census")
 ```
 
-## The API key
+## Quick start
 
 Data queries require a free Census API key; the discovery endpoints do not. Request one at <https://api.census.gov/data/key_signup.html>, then store it in `.Renviron`:
 
@@ -144,6 +144,22 @@ census_acs_labels(2023, "acs1", variables = c("B01001_001E", "B19013_001E"))[, .
 
 The whole grammar validates against the geography `requires` chains before spending a keyed call: a wildcard child (`county:*`) may omit its parents, but a specific one (`county:037`) must supply them — mirroring the API exactly.
 
+## Multi-year backfill
+
+`census_backfill_series()` pages the `time` predicate across a range of years, deduplicates, and returns one tidy series:
+
+```{r backfill, eval = FALSE}
+retail <- census_backfill_series(
+    "marts",
+    from = 2015, to = 2024,
+    category_code = "44000", data_type_code = "SM", seasonally_adj = "yes"
+)
+```
+
+## Point-in-time caveat
+
+The Census API returns only the *latest revised* value for each period — it has no vintage/as-of parameter. Retail sales, business formation, and construction are heavily revised, so a naive historical pull is current-vintage only and is a look-ahead trap for a backtest. Source revisable history from ALFRED, and snapshot forward pulls at fetch time; never feed the API's revised history into a point-in-time model.
+
 ## Asynchronous usage
 
 Set `async = TRUE` and consume the promise with `coro::async` / `await`, driving the event loop with `later`:
@@ -163,22 +179,6 @@ main()
 while (!later::loop_empty()) later::run_now()
 ```
 
-## Multi-year backfill
-
-`census_backfill_series()` pages the `time` predicate across a range of years, deduplicates, and returns one tidy series:
-
-```{r backfill, eval = FALSE}
-retail <- census_backfill_series(
-    "marts",
-    from = 2015, to = 2024,
-    category_code = "44000", data_type_code = "SM", seasonally_adj = "yes"
-)
-```
-
-## Point-in-time caveat
-
-The Census API returns only the *latest revised* value for each period — it has no vintage/as-of parameter. Retail sales, business formation, and construction are heavily revised, so a naive historical pull is current-vintage only and is a look-ahead trap for a backtest. Source revisable history from ALFRED, and snapshot forward pulls at fetch time; never feed the API's revised history into a point-in-time model.
-
 ## Error handling
 
 ```{r errors}
@@ -188,6 +188,22 @@ result <- tryCatch(
 )
 result
 ```
+
+## Documentation
+
+The rendered reference site is at <https://dereckscompany.github.io/census>.
+
+This package has no vignettes yet; the sections above are the whole of its worked documentation.
+
+Release history is in [`NEWS.md`](NEWS.md).
+
+## Citation
+
+Cite as: Mezquita, D. (2026). census: API Wrapper to the US Census Bureau Data API. R package version 0.2.3. https://github.com/dereckscompany/census
+
+## Licence
+
+MIT © Dereck Mezquita
 
 ```{r cleanup, include = FALSE}
 Sys.unsetenv("CENSUS_API_KEY")

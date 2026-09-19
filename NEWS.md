@@ -1,3 +1,16 @@
+# census 0.2.3
+
+**The README is reshaped into the fleet's standard layout so it reads the same way as every other package in the trading system.**
+
+No code changed. The reshaping moves and merges existing prose into a fixed heading order and adds the sections every package README now carries.
+
+- Added a bold plain-English lead sentence above the existing plain paragraph.
+- Merged `## What this is` into `## Technical overview` (the two said much the same thing about what the package fetches and how faithfully); the "What this is" heading was dropped, its sentences kept.
+- Renamed `## The API key` to `## Quick start`, wording unchanged.
+- Moved `## Multi-year backfill` and `## Point-in-time caveat` to sit before `## Asynchronous usage`, so every usage section precedes the async/error-handling pair.
+- Added `## Documentation` (pkgdown site, a note that there are no vignettes yet, and the `NEWS.md` link), `## Citation`, and `## Licence` (MIT), none of which existed before.
+- Regenerated `README.md` from `README.Rmd` via `scripts/BUILD.sh readme`; no chunk options, `eval` flags, or fixtures changed.
+
 # census 0.2.2
 
 This release tidies how the documentation reads; it changes no code.
