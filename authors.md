@@ -8,16 +8,16 @@
 ## Citation
 
 Source:
-[`inst/CITATION`](https://github.com/dereckscompany/census/blob/v0.2.2/inst/CITATION)
+[`inst/CITATION`](https://github.com/dereckscompany/census/blob/master/inst/CITATION)
 
 Mezquita D (2026). *census: API Wrapper to the US Census Bureau Data
-API*. R package version 0.2.2,
+API*. R package version 0.2.3,
 <https://dereckscompany.github.io/census>.
 
     @Manual{census-2026,
       title = {census: API Wrapper to the US Census Bureau Data API},
       author = {Dereck Mezquita},
       year = {2026},
-      note = {R package version 0.2.2},
+      note = {R package version 0.2.3},
       url = {https://dereckscompany.github.io/census},
     }

@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">census</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -28,9 +28,20 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/dereckscompany/census/blob/v0.2.2/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/dereckscompany/census/blob/master/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.2.3" id="census-023">census 0.2.3<a class="anchor" aria-label="anchor" href="#census-023"></a></h2>
+<p><strong>The README is reshaped into the fleet’s standard layout so it reads the same way as every other package in the trading system.</strong></p>
+<p>No code changed. The reshaping moves and merges existing prose into a fixed heading order and adds the sections every package README now carries.</p>
+<ul><li>Added a bold plain-English lead sentence above the existing plain paragraph.</li>
+<li>Merged <code>## What this is</code> into <code>## Technical overview</code> (the two said much the same thing about what the package fetches and how faithfully); the “What this is” heading was dropped, its sentences kept.</li>
+<li>Renamed <code>## The API key</code> to <code>## Quick start</code>, wording unchanged.</li>
+<li>Moved <code>## Multi-year backfill</code> and <code>## Point-in-time caveat</code> to sit before <code>## Asynchronous usage</code>, so every usage section precedes the async/error-handling pair.</li>
+<li>Added <code>## Documentation</code> (pkgdown site, a note that there are no vignettes yet, and the <code>NEWS.md</code> link), <code>## Citation</code>, and <code>## Licence</code> (MIT), none of which existed before.</li>
+<li>Regenerated <code>README.md</code> from <code>README.Rmd</code> via <code>scripts/BUILD.sh readme</code>; no chunk options, <code>eval</code> flags, or fixtures changed.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.2.2" id="census-022">census 0.2.2<a class="anchor" aria-label="anchor" href="#census-022"></a></h2>
 <p>This release tidies how the documentation reads; it changes no code.</p>
