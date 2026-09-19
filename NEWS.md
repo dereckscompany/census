@@ -1,6 +1,6 @@
 # census 0.2.2
 
-**This release tidies how the documentation reads; it changes no code.**
+This release tidies how the documentation reads; it changes no code.
 
 A prose sweep found two things worth fixing: a handful of doc paragraphs opened with a "plain English" scaffolding label instead of just writing the plain sentence, and several comments describing the Census Bureau's economic-indicator schemes used the American spelling "program" rather than the house British spelling "programme". Both are fixed; no argument, column, or function name changed, and no behaviour changed.
 
